@@ -1,0 +1,101 @@
+[
+    {
+        "name": "Ocean View Suite",
+        "maxcount": 4,
+        "phonenumber": "1234567890",
+        "rentperday": 200,
+        "type": "Suite",
+        "description": "A luxurious suite with a panoramic view of the ocean.",
+        "location": "Beachside",
+        "amenities": ["WiFi", "Air Conditioning", "Private Pool", "Breakfast Included"],
+        "availability": true
+    },
+    {
+        "name": "Mountain Cabin",
+        "maxcount": 6,
+        "phonenumber": "0987654321",
+        "rentperday": 150,
+        "type": "Cabin",
+        "description": "A cozy mountain cabin with stunning views and a fireplace.",
+        "location": "Mountain Valley",
+        "amenities": ["WiFi", "Fireplace", "Hiking Trails"],
+        "availability": true
+    },
+    {
+        "name": "City Apartment Deluxe",
+        "maxcount": 2,
+        "phonenumber": "1122334455",
+        "rentperday": 100,
+        "type": "Apartment",
+        "description": "A modern city apartment located in the heart of downtown.",
+        "location": "City Center",
+        "amenities": ["WiFi", "Air Conditioning", "Gym Access", "Pet Friendly"],
+        "availability": true
+    },
+    {
+        "name": "Luxury Villa",
+        "maxcount": 8,
+        "phonenumber": "6677889900",
+        "rentperday": 500,
+        "type": "Villa",
+        "description": "A luxurious villa with private pool, gym, and a home theater.",
+        "location": "Suburban Retreat",
+        "amenities": ["WiFi", "Air Conditioning", "Private Pool", "Home Theater", "Gym"],
+        "availability": false
+    },
+    {
+        "name": "Countryside Cottage",
+        "maxcount": 3,
+        "phonenumber": "2233445566",
+        "rentperday": 80,
+        "type": "Cottage",
+        "description": "A peaceful cottage located in the countryside, perfect for a weekend getaway.",
+        "location": "Countryside",
+        "amenities": ["WiFi", "Fireplace", "Garden", "Free Parking"],
+        "availability": true
+    },
+    {
+        "name": "Lake House",
+        "maxcount": 5,
+        "phonenumber": "3344556677",
+        "rentperday": 180,
+        "type": "House",
+        "description": "A beautiful lakefront house with direct access to the lake.",
+        "location": "Lakeside",
+        "amenities": ["WiFi", "Kayak Rentals", "Fishing Gear", "Fireplace"],
+        "availability": false
+    },
+    {
+        "name": "Studio Apartment",
+        "maxcount": 1,
+        "phonenumber": "4455667788",
+        "rentperday": 60,
+        "type": "Apartment",
+        "description": "A small and cozy studio apartment ideal for solo travelers.",
+        "location": "Urban Downtown",
+        "amenities": ["WiFi", "Air Conditioning", "Free Parking"],
+        "availability": true
+    },
+    {
+        "name": "Beachfront Bungalow",
+        "maxcount": 3,
+        "phonenumber": "5566778899",
+        "rentperday": 220,
+        "type": "Bungalow",
+        "description": "A charming beachfront bungalow just steps from the ocean.",
+        "location": "Beachfront",
+        "amenities": ["WiFi", "Private Beach Access", "BBQ Area", "Free Parking"],
+        "availability": true
+    },
+    {
+        "name": "Penthouse Suite",
+        "maxcount": 6,
+        "phonenumber": "6677889900",
+        "rentperday": 400,
+        "type": "Suite",
+        "description": "A top-floor penthouse suite with breathtaking city views and modern amenities.",
+        "location": "City Center",
+        "amenities": ["WiFi", "Air Conditioning", "Private Balcony", "Gym Access", "Concierge Service"],
+        "availability": false
+    }
+]
