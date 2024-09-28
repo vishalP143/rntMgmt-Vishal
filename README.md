@@ -3,7 +3,7 @@
 ![Node.js](https://img.shields.io/badge/Node.js-v18.x-green)
 ![MongoDB](https://img.shields.io/badge/MongoDB-v6.x-green)
 ![Express](https://img.shields.io/badge/Express-v4.x-orange)
-![License](https://img.shields.io/badge/License-MIT-blue)
+
 
 ## Table of Contents
 
