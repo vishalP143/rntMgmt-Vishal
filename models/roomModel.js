@@ -4,7 +4,7 @@ const roomSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,  // Room name is mandatory
-    unique: true     // Ensures no two rooms have the same name
+    unique: true     // Check no two rooms have the same name
   },
   maxcount: {
     type: Number,

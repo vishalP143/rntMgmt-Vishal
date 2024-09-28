@@ -24,10 +24,10 @@ exports.createRoom = async (req, res) => {
 // Get all rooms
 exports.getAllRooms = async (req, res) => {
     try {
-        const allRooms = await RoomModel.find(); // Fetch all rooms from the database
+        const allRooms = await RoomModel.find(); // Get all rooms from the database
         res.send(allRooms); // Send all rooms as a response
     } catch (err) {
-        res.status(400).send(err.message); // Send an error response if something goes wrong
+        res.status(400).send(err.message); // Send an error response if something  wrong
     }
 };
 
