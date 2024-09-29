@@ -30,7 +30,7 @@ const roomSchema = new mongoose.Schema({
     type: String,
     required: true   // Location of the room/property is mandatory
   },
-  amenities: {
+  fatures: {
     type: [String],  // Array of amenities (e.g., WiFi, Air Conditioning)
     required: true   // At least one amenity is required
   },
