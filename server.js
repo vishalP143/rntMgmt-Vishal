@@ -13,7 +13,7 @@ app.use(express.json());
 
 // Basic route for home page
 app.get("/", (req, res) => {
-    res.send("Home Page of the Rental Management App");
+    res.send("Hii book here your room and enjoy your quality time.Thank you for choosing us.Visit again");
 });
 
 // Use room routes with prefix '/api'
