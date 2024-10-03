@@ -12,6 +12,7 @@ exports.createRoom = async (req, res) => {
             description: req.body.description,
             location: req.body.location,
             features: req.body.features,
+            roomissueddate:req.body.roomissueddate,
             availability: req.body.availability
         });
         newRoom = await newRoom.save(); // Save the new room to the database
@@ -54,6 +55,7 @@ exports.updateRoom = async (req, res) => {
             description: req.body.description,
             location: req.body.location,
             features: req.body.features,
+            roomissueddate:req.body.roomissueddate,
             availability: req.body.availability
         }, { new: true }); // Return the updated room
 

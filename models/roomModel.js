@@ -6,34 +6,47 @@ const roomSchema = new mongoose.Schema({
     required: true,  // Room name is mandatory
     unique: true     // Check no two rooms have the same name
   },
+
   maxcount: {
     type: Number,
     required: true   // Maximum number of people allowed in the room
   },
+
   phonenumber: {
     type: String,
     required: true   // Contact phone number is mandatory
   },
+
   rentperday: {
     type: Number,
     required: true   // Daily rent amount is mandatory
   },
+
   type: {
     type: String,
     required: true   // Room type is mandatory (e.g., Single, Double, Suite)
   },
+
   description: {
     type: String,
     required: true   // A description of the room is required
   },
+
   location: {
     type: String,
     required: true   // Location of the room/property is mandatory
   },
+  
   fatures: {
     type: [String],  // Array of amenities (e.g., WiFi, Air Conditioning)
     required: true   // At least one amenity is required
   },
+
+  roomissueddate: {
+    type: Date,
+    required: true
+  },
+
   availability: {
     type: Boolean,
     default: true    // Availability is true by default

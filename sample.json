@@ -1,101 +1,39 @@
 [
     {
-        "name": "Ocean View Suite",
-        "maxcount": 4,
-        "phonenumber": "1234567890",
-        "rentperday": 200,
-        "type": "Suite",
-        "description": "A luxurious suite with a panoramic view of the ocean.",
-        "location": "Beachside",
-        "features": ["WiFi", "Air Conditioning", "Private Pool", "Breakfast Included"],
-        "availability": true
+      "name": "Deluxe Suite",
+      "maxcount": 4,
+      "phonenumber": "+1234567890",
+      "rentperday": 120,
+      "type": "Suite",
+      "description": "A luxurious suite with a king-size bed and a spacious living area.",
+      "location": "Downtown City Center",
+      "fatures": ["WiFi", "Air Conditioning", "Mini Bar", "Room Service"],
+      "roomissueddate": "2024-01-10",
+      "availability": true
     },
     {
-        "name": "Mountain Cabin",
-        "maxcount": 6,
-        "phonenumber": "0987654321",
-        "rentperday": 150,
-        "type": "Cabin",
-        "description": "A cozy mountain cabin with stunning views and a fireplace.",
-        "location": "Mountain Valley",
-        "features": ["WiFi", "Fireplace", "Hiking Trails"],
-        "availability": true
+      "name": "Single Room",
+      "maxcount": 1,
+      "phonenumber": "+0987654321",
+      "rentperday": 50,
+      "type": "Single",
+      "description": "A cozy room for solo travelers, equipped with all essential amenities.",
+      "location": "Near Airport",
+      "fatures": ["WiFi", "Room Heater", "Breakfast Included"],
+      "roomissueddate": "2024-03-15",
+      "availability": true
     },
     {
-        "name": "City Apartment Deluxe",
-        "maxcount": 2,
-        "phonenumber": "1122334455",
-        "rentperday": 100,
-        "type": "Apartment",
-        "description": "A modern city apartment located in the heart of downtown.",
-        "location": "City Center",
-        "features": ["WiFi", "Air Conditioning", "Gym Access", "Pet Friendly"],
-        "availability": true
-    },
-    {
-        "name": "Luxury Villa",
-        "maxcount": 8,
-        "phonenumber": "6677889900",
-        "rentperday": 500,
-        "type": "Villa",
-        "description": "A luxurious villa with private pool, gym, and a home theater.",
-        "location": "Suburban Retreat",
-        "features": ["WiFi", "Air Conditioning", "Private Pool", "Home Theater", "Gym"],
-        "availability": false
-    },
-    {
-        "name": "Countryside Cottage",
-        "maxcount": 3,
-        "phonenumber": "2233445566",
-        "rentperday": 80,
-        "type": "Cottage",
-        "description": "A peaceful cottage located in the countryside, perfect for a weekend getaway.",
-        "location": "Countryside",
-        "features": ["WiFi", "Fireplace", "Garden", "Free Parking"],
-        "availability": true
-    },
-    {
-        "name": "Lake House",
-        "maxcount": 5,
-        "phonenumber": "3344556677",
-        "rentperday": 180,
-        "type": "House",
-        "description": "A beautiful lakefront house with direct access to the lake.",
-        "location": "Lakeside",
-        "features": ["WiFi", "Kayak Rentals", "Fishing Gear", "Fireplace"],
-        "availability": false
-    },
-    {
-        "name": "Studio Apartment",
-        "maxcount": 1,
-        "phonenumber": "4455667788",
-        "rentperday": 60,
-        "type": "Apartment",
-        "description": "A small and cozy studio apartment ideal for solo travelers.",
-        "location": "Urban Downtown",
-        "features": ["WiFi", "Air Conditioning", "Free Parking"],
-        "availability": true
-    },
-    {
-        "name": "Beachfront Bungalow",
-        "maxcount": 3,
-        "phonenumber": "5566778899",
-        "rentperday": 220,
-        "type": "Bungalow",
-        "description": "A charming beachfront bungalow just steps from the ocean.",
-        "location": "Beachfront",
-        "features": ["WiFi", "Private Beach Access", "BBQ Area", "Free Parking"],
-        "availability": true
-    },
-    {
-        "name": "Penthouse Suite",
-        "maxcount": 6,
-        "phonenumber": "6677889900",
-        "rentperday": 400,
-        "type": "Suite",
-        "description": "A top-floor penthouse suite with breathtaking city views and modern features.",
-        "location": "City Center",
-        "features": ["WiFi", "Air Conditioning", "Private Balcony", "Gym Access", "Concierge Service"],
-        "availability": false
+      "name": "Double Room",
+      "maxcount": 2,
+      "phonenumber": "+1122334455",
+      "rentperday": 80,
+      "type": "Double",
+      "description": "Comfortable room for two with a double bed and modern amenities.",
+      "location": "Beachside Resort",
+      "fatures": ["WiFi", "Air Conditioning", "TV"],
+      "roomissueddate": "2023-12-05",
+      "availability": false
     }
-]
+  ]
+  
