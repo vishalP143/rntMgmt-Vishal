@@ -42,7 +42,7 @@ const roomSchema = new mongoose.Schema({
     required: true   // At least one amenity is required
   },
 
-  roomissueddate: {
+  roomIssuedDate: {
     type: Date,
     required: true
   },
