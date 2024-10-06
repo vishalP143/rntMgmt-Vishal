@@ -4,7 +4,7 @@ const roomSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,  // Room name is mandatory
-    unique: true     // Check no two rooms have the same name
+    unique: true     // Ensure no two rooms have the same name
   },
 
   maxcount: {
@@ -37,14 +37,15 @@ const roomSchema = new mongoose.Schema({
     required: true   // Location of the room/property is mandatory
   },
   
-  fatures: {
+  features: {
     type: [String],  // Array of amenities (e.g., WiFi, Air Conditioning)
     required: true   // At least one amenity is required
   },
 
   roomIssuedDate: {
     type: Date,
-    required: true
+    required: true,
+    default: Date.now // Default to the current date if not provided
   },
 
   availability: {
