@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   AppBar,
@@ -7,52 +7,85 @@ import {
   Button,
   Box,
   IconButton,
-  Menu,
-  MenuItem,
 } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import HomeIcon from '@mui/icons-material/Home';
-import MenuBookIcon from '@mui/icons-material/MenuBook'; // Added Notes icon
-
-const notesPages = [
-  { title: 'Home', path: '/notes/home' },
-  { title: 'Schedule', path: '/notes/schedule' },
-];
+import InfoIcon from '@mui/icons-material/Info';
+import ViewListIcon from '@mui/icons-material/ViewList';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 const Navbar = () => {
-  const [notesAnchorEl, setNotesAnchorEl] = useState(null);
-
-  const handleNotesClick = (event) => {
-    setNotesAnchorEl(event.currentTarget);
-  };
-
-  const handleNotesClose = () => {
-    setNotesAnchorEl(null);
-  };
-
   return (
-    <AppBar position="static" color="transparent" elevation={0} sx={{ width: '100%' }}>
+    <AppBar
+      position="static"
+      color="transparent"
+      elevation={0}
+      sx={{ width: '100%' }}
+    >
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'primary.main' }}>
-          Book Management Project
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{ flexGrow: 1, color: 'primary.main' }}
+        >
+          Rental Management System
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Button>
-                Home
-            </Button>
-            <Button>
-             notes
-             </Button>
-             <Menu>
-                Menu
-             </Menu>
-             <IconButton>
-                Button
-             </IconButton>
-            </Box>
-            </Toolbar>
-            </AppBar>
-  )
-}
-export default Navbar;
+          {/* Home Button */}
+          <Button
+            color="primary"
+            component={RouterLink}
+            to="/"
+            startIcon={<HomeIcon />}
+          >
+            Home
+          </Button>
 
+          {/* About Us Button */}
+          <Button
+            color="primary"
+            component={RouterLink}
+            to="/about-us"
+            startIcon={<InfoIcon />}
+          >
+            About Us
+          </Button>
+
+          {/* Show All Rooms Button */}
+          <Button
+            color="primary"
+            component={RouterLink}
+            to="/show-rooms"
+            startIcon={<ViewListIcon />}
+          >
+            Show All Rooms
+          </Button>
+
+          {/* Create Room Button */}
+          <Button
+            color="primary"
+            component={RouterLink}
+            to="/create-room"
+            startIcon={<AddCircleIcon />}
+          >
+            Create Room
+          </Button>
+
+          {/* GitHub Icon Button */}
+          <IconButton
+            color="primary"
+            component="a"
+            href="https://github.com/vishalP143/rntMgmt-Vishal"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+          >
+            <GitHubIcon />
+          </IconButton>
+        </Box>
+      </Toolbar>
+    </AppBar>
+  );
+};
+
+export default Navbar;
