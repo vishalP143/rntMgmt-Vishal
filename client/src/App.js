@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box } from '@mui/material'; 
 import { Routes, Route } from 'react-router-dom'; 
+import CreateRoom from './components/CreateRoom';
 import HomePage from './components/HomePage';
 import Navbar from './components/Navbar'; 
 import Footer from './components/Footer'; 
@@ -8,7 +9,6 @@ import Footer from './components/Footer';
 // Placeholder components for routing
 const AboutUs = () => <h1>About Us Page</h1>;
 const ShowRooms = () => <h1>Show All Rooms Page</h1>;
-const CreateRoom = () => <h1>Create Room Page</h1>;
 
 const App = () => {
   return (
