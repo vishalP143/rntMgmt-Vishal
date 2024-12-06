@@ -6,7 +6,6 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer'; 
 
 // Placeholder components for routing
-const Home = () => <h1>Welcome to the Rental Management System</h1>;
 const AboutUs = () => <h1>About Us Page</h1>;
 const ShowRooms = () => <h1>Show All Rooms Page</h1>;
 const CreateRoom = () => <h1>Create Room Page</h1>;
@@ -31,10 +30,11 @@ const App = () => {
         }}
       >
         <Routes>
-          <Route path="/" element={<Home />} />
+          
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/show-rooms" element={<ShowRooms />} />
           <Route path="/create-room" element={<CreateRoom />} />
+          <Route path="/" element={<HomePage/>} />
         </Routes>
       </Box>
 
