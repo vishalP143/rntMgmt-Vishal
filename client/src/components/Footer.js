@@ -23,7 +23,7 @@ const Footer = () => (
         fontSize: '1.5rem',
       }}
     >
-      Built with ❤️ by Vishal Pradhan
+      Created with passion and care by Vishal Pradhan
     </Typography>
 
     <Typography
