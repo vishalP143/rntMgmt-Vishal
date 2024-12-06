@@ -1,26 +1,25 @@
 import React from 'react';
 import { Box, Typography, IconButton } from '@mui/material';
-import { GitHub, LinkedIn, Twitter } from '@mui/icons-material'; // Social icons (optional)
+import { GitHub, LinkedIn, Twitter } from '@mui/icons-material'; 
 
 const Footer = () => (
   <Box
     component="footer"
     sx={{
-      bgcolor: 'primary.main', // Use primary theme color for background
-      color: 'text.primary', // Use primary text color
+      bgcolor: 'primary.main', 
+      color: 'text.primary', 
       py: 4,
       px: 2,
       textAlign: 'center',
-      borderTop: `2px solid ${theme => theme.palette.secondary.main}`, // Highlight border
+      borderTop: `2px solid ${theme => theme.palette.secondary.main}`, 
     }}
   >
-    {/* Main Footer Content */}
     <Typography
       variant="h6"
       gutterBottom
       sx={{
-        fontFamily: '"Fira Sans", sans-serif', // Updated font
-        fontWeight: 700, // Bold text
+        fontFamily: '"Fira Sans", sans-serif', 
+        fontWeight: 700, 
         fontSize: '1.5rem',
       }}
     >
@@ -39,7 +38,6 @@ const Footer = () => (
       © {new Date().getFullYear()} Bsc Cohort | All Rights Reserved
     </Typography>
 
-    {/* Optional Social Media Icons */}
     <Box sx={{ mt: 2 }}>
       <IconButton
         href="https://github.com/vishalP143"

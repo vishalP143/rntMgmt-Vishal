@@ -1,8 +1,8 @@
 import React from 'react';
-import { Box } from '@mui/material'; // Material-UI Box for layout management
-import { Routes, Route } from 'react-router-dom'; // Import Routes and Route for routing
-import Navbar from './components/Navbar'; // Import the Navbar component
-import Footer from './components/Footer'; // Import the Footer component
+import { Box } from '@mui/material'; 
+import { Routes, Route } from 'react-router-dom'; 
+import Navbar from './components/Navbar'; 
+import Footer from './components/Footer'; 
 
 // Placeholder components for routing
 const Home = () => <h1>Welcome to the Rental Management System</h1>;
@@ -16,16 +16,14 @@ const App = () => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        minHeight: '100vh', // Ensures the footer stays at the bottom
+        minHeight: '100vh', 
       }}
     >
-      {/* Navbar at the top */}
       <Navbar />
 
-      {/* Main content */}
       <Box
         sx={{
-          flex: 1, // Makes this box take up remaining space
+          flex: 1, 
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -39,7 +37,6 @@ const App = () => {
         </Routes>
       </Box>
 
-      {/* Footer */}
       <Footer />
     </Box>
   );

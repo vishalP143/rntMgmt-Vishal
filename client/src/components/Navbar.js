@@ -31,7 +31,7 @@ const Navbar = () => {
           Rental Management System
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          {/* Home Button */}
+
           <Button
             color="primary"
             component={RouterLink}
@@ -41,7 +41,6 @@ const Navbar = () => {
             Home
           </Button>
 
-          {/* About Us Button */}
           <Button
             color="primary"
             component={RouterLink}
@@ -51,7 +50,6 @@ const Navbar = () => {
             About Us
           </Button>
 
-          {/* Show All Rooms Button */}
           <Button
             color="primary"
             component={RouterLink}
@@ -61,7 +59,6 @@ const Navbar = () => {
             Show All Rooms
           </Button>
 
-          {/* Create Room Button */}
           <Button
             color="primary"
             component={RouterLink}
@@ -71,7 +68,6 @@ const Navbar = () => {
             Create Room
           </Button>
 
-          {/* GitHub Icon Button */}
           <IconButton
             color="primary"
             component="a"
