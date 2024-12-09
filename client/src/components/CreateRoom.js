@@ -36,20 +36,17 @@ const CreateRoom = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Send POST request
       await axios.post('http://localhost:5000/rooms', {
         ...room,
         features: room.features.split(',').map((item) => item.trim()),
       });
 
-      // Show success notification
       setNotification({
         open: true,
-        message: 'Room created successfully!',
+        message: 'Congratulation and Celebration',
         severity: 'success',
       });
 
-      // Clear the form and redirect to home after a short delay
       setRoom({
         name: '',
         maxcount: '',
@@ -64,17 +61,16 @@ const CreateRoom = () => {
     } catch (error) {
       console.error('Error creating room:', error);
 
-      // Show error notification
       setNotification({
         open: true,
-        message: 'Failed to create room. Please try again!',
+        message: 'Bhariye na room bhariye',
         severity: 'error',
       });
     }
   };
 
   const handleCancel = () => {
-    navigate('/'); // Navigate back to home
+    navigate('/');
   };
 
   const handleCloseNotification = () => {
@@ -89,7 +85,7 @@ const CreateRoom = () => {
         padding: 4,
         borderRadius: 2,
         boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
-        backgroundColor: 'white',
+        backgroundColor: '#1c1c1c', // Dark background for the form
       }}
     >
       <Typography 
@@ -98,6 +94,7 @@ const CreateRoom = () => {
         textAlign="center" 
         mb={3}
         color="primary"
+        fontWeight={700}
       >
         Create a New Room
       </Typography>
@@ -112,6 +109,12 @@ const CreateRoom = () => {
           onChange={handleChange}
           required
           sx={{ mb: 2 }}
+          InputLabelProps={{
+            style: { color: '#93a1a1' }, // Lighter label color for readability
+          }}
+          InputProps={{
+            style: { color: '#fdf6e3' }, // Light text color
+          }}
         />
         <TextField
           fullWidth
@@ -123,6 +126,12 @@ const CreateRoom = () => {
           required
           type="number"
           sx={{ mb: 2 }}
+          InputLabelProps={{
+            style: { color: '#93a1a1' },
+          }}
+          InputProps={{
+            style: { color: '#fdf6e3' },
+          }}
         />
         <TextField
           fullWidth
@@ -133,6 +142,12 @@ const CreateRoom = () => {
           onChange={handleChange}
           required
           sx={{ mb: 2 }}
+          InputLabelProps={{
+            style: { color: '#93a1a1' },
+          }}
+          InputProps={{
+            style: { color: '#fdf6e3' },
+          }}
         />
         <TextField
           fullWidth
@@ -144,6 +159,12 @@ const CreateRoom = () => {
           required
           type="number"
           sx={{ mb: 2 }}
+          InputLabelProps={{
+            style: { color: '#93a1a1' },
+          }}
+          InputProps={{
+            style: { color: '#fdf6e3' },
+          }}
         />
         <TextField
           fullWidth
@@ -154,6 +175,12 @@ const CreateRoom = () => {
           onChange={handleChange}
           required
           sx={{ mb: 2 }}
+          InputLabelProps={{
+            style: { color: '#93a1a1' },
+          }}
+          InputProps={{
+            style: { color: '#fdf6e3' },
+          }}
         />
         <TextField
           fullWidth
@@ -166,6 +193,12 @@ const CreateRoom = () => {
           multiline
           rows={3}
           sx={{ mb: 2 }}
+          InputLabelProps={{
+            style: { color: '#93a1a1' },
+          }}
+          InputProps={{
+            style: { color: '#fdf6e3' },
+          }}
         />
         <TextField
           fullWidth
@@ -176,6 +209,12 @@ const CreateRoom = () => {
           onChange={handleChange}
           required
           sx={{ mb: 2 }}
+          InputLabelProps={{
+            style: { color: '#93a1a1' },
+          }}
+          InputProps={{
+            style: { color: '#fdf6e3' },
+          }}
         />
         <TextField
           fullWidth
@@ -186,6 +225,12 @@ const CreateRoom = () => {
           onChange={handleChange}
           required
           sx={{ mb: 2 }}
+          InputLabelProps={{
+            style: { color: '#93a1a1' },
+          }}
+          InputProps={{
+            style: { color: '#fdf6e3' },
+          }}
         />
         <Box
           sx={{
@@ -198,7 +243,11 @@ const CreateRoom = () => {
             variant="contained"
             color="primary"
             type="submit"
-            sx={{ width: '48%' }}
+            sx={{
+              width: '48%',
+              fontWeight: 'bold',
+              borderRadius: '12px', // Rounded button
+            }}
           >
             Create Room
           </Button>
@@ -206,7 +255,11 @@ const CreateRoom = () => {
             variant="outlined"
             color="secondary"
             onClick={handleCancel}
-            sx={{ width: '48%' }}
+            sx={{
+              width: '48%',
+              fontWeight: 'bold',
+              borderRadius: '12px',
+            }}
           >
             Cancel
           </Button>
