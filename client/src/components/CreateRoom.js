@@ -43,7 +43,7 @@ const CreateRoom = () => {
 
       setNotification({
         open: true,
-        message: 'Congratulation and Celebration',
+        message: 'Room created successfully!',
         severity: 'success',
       });
 
@@ -57,13 +57,14 @@ const CreateRoom = () => {
         location: '',
         features: '',
       });
+
       setTimeout(() => navigate('/'), 1500);
     } catch (error) {
       console.error('Error creating room:', error);
 
       setNotification({
         open: true,
-        message: 'Bhariye na room bhariye',
+        message: error.response?.data?.message || 'Failed to create room. Please try again.',
         severity: 'error',
       });
     }

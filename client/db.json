@@ -1,0 +1,15 @@
+{
+  "rooms": [
+    {
+      "id": 1,
+      "name": "Room A",
+      "maxcount": 2,
+      "phonenumber": "1234567890",
+      "rentperday": 50,
+      "type": "Single",
+      "description": "A cozy single room",
+      "location": "Downtown",
+      "features": ["WiFi", "TV"]
+    }
+  ]
+}
