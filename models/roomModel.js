@@ -1,59 +1,50 @@
 const mongoose = require('mongoose');
 
+// Room Schema
 const roomSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,  // Room name is mandatory
-    unique: true     // Ensure no two rooms have the same name
-  },
-
-  maxcount: {
-    type: Number,
-    required: true   // Maximum number of people allowed in the room
-  },
-
-  phonenumber: {
-    type: String,
-    required: true   // Contact phone number is mandatory
-  },
-
-  rentperday: {
-    type: Number,
-    required: true   // Daily rent amount is mandatory
-  },
-
-  type: {
-    type: String,
-    required: true   // Room type is mandatory (e.g., Single, Double, Suite)
-  },
-
-  description: {
-    type: String,
-    required: true   // A description of the room is required
-  },
-
-  location: {
-    type: String,
-    required: true   // Location of the room/property is mandatory
-  },
-  
-  features: {
-    type: [String],  // Array of amenities (e.g., WiFi, Air Conditioning)
-    required: true   // At least one amenity is required
-  },
-
-  roomIssuedDate: {
-    type: Date,
-    required: true,
-    default: Date.now // Default to the current date if not provided
-  },
-
-  availability: {
-    type: Boolean,
-    default: true    // Availability is true by default
-  }
+    name: {
+        type: String,
+        required: true
+    },
+    maxcount: {
+        type: Number,
+        required: true
+    },
+    phonenumber: {
+        type: String,
+        required: true
+    },
+    rentperday: {
+        type: Number,
+        required: true
+    },
+    type: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    location: {
+        type: String,
+        required: true
+    },
+    features: {
+        type: [String],  // An array of strings
+        required: true
+    },
+    roomIssuedDate: {
+        type: Date,
+        default: Date.now
+    },
+    availability: {
+        type: Boolean,
+        default: true
+    }
 });
 
-const RoomModel = mongoose.model('Room', roomSchema);
+// Create a model from the schema
+const Room = mongoose.model('Room', roomSchema);
 
-module.exports = RoomModel;
+module.exports = Room;

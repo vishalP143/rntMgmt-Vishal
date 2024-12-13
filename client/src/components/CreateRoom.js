@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Box, 
   TextField, 
-  Typography, 
+  Typography,                 
   Button, 
   Snackbar, 
   Alert 
@@ -35,11 +35,19 @@ const CreateRoom = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Room data before submit:', room); // Debugging line
+
+    // Ensure correct data types
+    const parsedRoom = {
+      ...room,
+      maxcount: Number(room.maxcount),        // Parse maxcount to number
+      rentperday: Number(room.rentperday),    // Parse rentperday to number
+      features: room.features.split(',').map(item => item.trim()),  // Convert features to array
+    };
+
     try {
-      await axios.post('http://localhost:5000/rooms', {
-        ...room,
-        features: room.features.split(',').map((item) => item.trim()),
-      });
+      const response = await axios.post('http://localhost:5000/rooms', parsedRoom);
+      console.log('Response from server:', response.data); // Debugging response
 
       setNotification({
         open: true,
@@ -47,6 +55,7 @@ const CreateRoom = () => {
         severity: 'success',
       });
 
+      // Reset the form
       setRoom({
         name: '',
         maxcount: '',
@@ -61,10 +70,11 @@ const CreateRoom = () => {
       setTimeout(() => navigate('/'), 1500);
     } catch (error) {
       console.error('Error creating room:', error);
+      const errorMessage = error.response?.data?.message || 'Failed to create room. Please try again.';
 
       setNotification({
         open: true,
-        message: error.response?.data?.message || 'Failed to create room. Please try again.',
+        message: errorMessage,
         severity: 'error',
       });
     }
@@ -125,7 +135,6 @@ const CreateRoom = () => {
           value={room.maxcount}
           onChange={handleChange}
           required
-          type="number"
           sx={{ mb: 2 }}
           InputLabelProps={{
             style: { color: '#93a1a1' },
@@ -158,7 +167,6 @@ const CreateRoom = () => {
           value={room.rentperday}
           onChange={handleChange}
           required
-          type="number"
           sx={{ mb: 2 }}
           InputLabelProps={{
             style: { color: '#93a1a1' },
@@ -169,7 +177,7 @@ const CreateRoom = () => {
         />
         <TextField
           fullWidth
-          label="Type (e.g., Single, Double)"
+          label="Type"
           name="type"
           variant="outlined"
           value={room.type}
@@ -191,8 +199,6 @@ const CreateRoom = () => {
           value={room.description}
           onChange={handleChange}
           required
-          multiline
-          rows={3}
           sx={{ mb: 2 }}
           InputLabelProps={{
             style: { color: '#93a1a1' },
@@ -233,6 +239,7 @@ const CreateRoom = () => {
             style: { color: '#fdf6e3' },
           }}
         />
+        
         <Box
           sx={{
             display: 'flex',
