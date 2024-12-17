@@ -1,40 +1,44 @@
 import React from 'react';
-import { Box } from '@mui/material'; 
-import { Routes, Route } from 'react-router-dom'; 
+import { Box } from '@mui/material';
+import { Routes, Route } from 'react-router-dom';
 import CreateRoom from './components/CreateRoom';
 import HomePage from './components/HomePage';
-import Navbar from './components/Navbar'; 
-import Footer from './components/Footer'; 
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import AboutUs from './components/AboutUs';
+import ShowRoomList from './components/ShowRoomList';
+import ShowRoomDetails from './components/ShowRoomDetails';
+import UpdateRoomInfo from './components/UpdateRoomInfo';
 
-// Placeholder components for routing
-const AboutUs = () => <h1>About Us Page</h1>;
-const ShowRooms = () => <h1>Show All Rooms Page</h1>;
-
+// Main App Component
 const App = () => {
   return (
     <Box
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        minHeight: '100vh', 
+        minHeight: '100vh', // Ensures full page height
       }}
     >
       <Navbar />
 
       <Box
         sx={{
-          flex: 1, 
+          flex: 1,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          padding: 2, // Optional padding to give spacing around content
         }}
       >
         <Routes>
-          
+          {/* Define Routes */}
+          <Route path="/" element={<HomePage />} />
           <Route path="/about-us" element={<AboutUs />} />
-          <Route path="/show-rooms" element={<ShowRooms />} />
           <Route path="/create-room" element={<CreateRoom />} />
-          <Route path="/" element={<HomePage/>} />
+          <Route path="/show-rooms" element={<ShowRoomList />} />
+          <Route path="/show-room/:roomId" element={<ShowRoomDetails />} />
+          <Route path="/update-room/:roomId" element={<UpdateRoomInfo />} />
         </Routes>
       </Box>
 

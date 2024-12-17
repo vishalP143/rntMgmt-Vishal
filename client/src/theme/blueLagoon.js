@@ -20,6 +20,15 @@ const blueLagoonColors = {
 };
 
 const blueLagoonTheme = createTheme({
+  MuiCssBaseline: {
+    styleOverrides: `
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&family=Merriweather:wght@400;700&display=swap');
+      body {
+        background-color: ${blueLagoonColors.base};
+        color: ${blueLagoonColors.text};
+      }
+    `,
+  },
   palette: {
     mode: 'dark',
     background: {
@@ -93,15 +102,7 @@ const blueLagoonTheme = createTheme({
         },
       },
     },
-    MuiCssBaseline: {
-      styleOverrides: `
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&family=Merriweather:wght@400;700&display=swap');
-        body {
-          background-color: ${blueLagoonColors.base};
-          color: ${blueLagoonColors.text};
-        }
-      `,
-    },
+    
   },
 });
 
