@@ -52,7 +52,7 @@ const CreateRoom = () => {
     };
 
     try {
-      await axios.post('http://localhost:5000/rooms', parsedRoom);
+      await axios.post('https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms', parsedRoom);
 
       setNotification({
         open: true,
