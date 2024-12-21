@@ -1,66 +1,49 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-// Room Schema
 const roomSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: [true, "Room name is required"],
-        trim: true,
+    number: {
+        type: Number,
+        required: [true, "Room number is required"],
+        trim: true, // Optional: Can be removed if not necessary for numbers
+        min: [1, "Room number must be greater than 0"],
     },
     maxcount: {
         type: Number,
-        required: [true, "Max count is required"],
-        min: [1, "Max count must be at least 1"], // Minimum value validation
+        required: [true, "Maximum occupancy is required"],
     },
     phonenumber: {
         type: String,
         required: [true, "Phone number is required"],
-        match: [/^\d{10}$/, "Phone number must be exactly 10 digits"], // Exact 10-digit validation
+        match: [/^\d{10}$/, "Phone number must be 10 digits"],
     },
     rentperday: {
         type: Number,
         required: [true, "Rent per day is required"],
-        min: [0, "Rent per day cannot be negative"], // Minimum rent validation
     },
     type: {
         type: String,
-        required: [true, "Type is required"],
-        enum: {
-            values: ["Single", "Double", "Suite", "Deluxe"], // Example room types, customize as needed
-            message: "Type must be one of: Single, Double, Suite, Deluxe",
-        },
+        required: [true, "Room type is required"],
     },
     description: {
         type: String,
-        required: [true, "Description is required"],
-        trim: true,
+        required: [true, "Room description is required"],
     },
     location: {
         type: String,
-        required: [true, "Location is required"],
-        trim: true,
+        required: [true, "Room location is required"],
     },
     features: {
-        type: [String], // Array of strings
-        required: [true, "Features are required"],
-        validate: {
-            validator: function (arr) {
-                return arr.length > 0; // Ensure at least one feature
-            },
-            message: "At least one feature must be provided",
-        },
-    },
-    roomIssuedDate: {
-        type: Date,
-        default: Date.now,
+        type: [String],
+        required: [true, "Room features are required"],
     },
     availability: {
         type: Boolean,
         default: true,
     },
+    roomIssuedDate: {
+        type: Date,
+        default: Date.now,
+    },
 });
 
-// Create a model from the schema
-const Room = mongoose.model('Room', roomSchema);
-
-module.exports = Room;
+module.exports = mongoose.model("Room", roomSchema);

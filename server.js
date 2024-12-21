@@ -31,7 +31,7 @@ app.get("*", function (_, res) {
     );
 });
 
-app.use('/api', roomRoutes); // Use room routes with prefix '/api'
+app.use('/api',roomRoutes); // Use room routes with prefix '/api'
 
 const PORT = process.env.PORT || 5000;
 // Start the server
