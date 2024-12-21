@@ -6,7 +6,7 @@ import axios from 'axios';
 const CreateRoom = () => {
   const navigate = useNavigate();
   const [room, setRoom] = useState({
-    name: '',
+    number: '', // Changed from name to number
     maxcount: '',
     phonenumber: '',
     rentperday: '',
@@ -14,8 +14,8 @@ const CreateRoom = () => {
     description: '',
     location: '',
     features: '',
-    availability: true, // Boolean field for availability
-    roomIssuedDate: new Date().toISOString().split('T')[0], // Date field for roomIssuedDate
+    availability: true,
+    roomIssuedDate: new Date().toISOString().split('T')[0],
   });
 
   const [notification, setNotification] = useState({
@@ -35,7 +35,8 @@ const CreateRoom = () => {
 
     // Handle input for numeric values
     if (name === 'phonenumber' && value !== '' && !/^\d*$/.test(value)) return;
-    if ((name === 'maxcount' || name === 'rentperday') && value !== '' && !/^\d*$/.test(value)) return;
+    if ((name === 'maxcount' || name === 'rentperday' || name === 'number') && value !== '' && !/^\d*$/.test(value))
+      return;
 
     setRoom({ ...room, [name]: value });
   };
@@ -46,9 +47,12 @@ const CreateRoom = () => {
     // Parse room data before submitting
     const parsedRoom = {
       ...room,
+      number: Number(room.number), // Ensure room number is numeric
       maxcount: Number(room.maxcount),
       rentperday: Number(room.rentperday),
-      features: room.features.split(',').map((item) => item.trim()), // Handle comma-separated features
+      features: typeof room.features === 'string'
+        ? room.features.split(',').map((item) => item.trim()) // Handle comma-separated features
+        : room.features, // Keep as-is if already an array
     };
 
     try {
@@ -62,7 +66,7 @@ const CreateRoom = () => {
 
       // Reset the form
       setRoom({
-        name: '',
+        number: '',
         maxcount: '',
         phonenumber: '',
         rentperday: '',
@@ -111,15 +115,19 @@ const CreateRoom = () => {
       <form onSubmit={handleSubmit}>
         <TextField
           fullWidth
-          label="Room Name"
-          name="name"
+          label="Room Number"
+          name="number"
           variant="outlined"
-          value={room.name}
+          value={room.number}
           onChange={handleChange}
           required
-          sx={{ mb: 2 }}
+          type="number"
+          InputProps={{
+            inputProps: { min: 1 },
+            style: { color: '#fdf6e3' },
+          }}
           InputLabelProps={{ style: { color: '#93a1a1' } }}
-          InputProps={{ style: { color: '#fdf6e3' } }}
+          sx={{ mb: 2 }}
         />
         <TextField
           fullWidth
@@ -218,7 +226,6 @@ const CreateRoom = () => {
           sx={{ mb: 2 }}
         />
 
-        {/* Availability Switch */}
         <FormControlLabel
           control={
             <Switch
@@ -232,7 +239,6 @@ const CreateRoom = () => {
           sx={{ mb: 2 }}
         />
 
-        {/* Room Issued Date */}
         <TextField
           fullWidth
           label="Room Issued Date"
@@ -274,7 +280,6 @@ const CreateRoom = () => {
         </Box>
       </form>
 
-      {/* Notification Snackbar */}
       <Snackbar
         open={notification.open}
         autoHideDuration={6000}
