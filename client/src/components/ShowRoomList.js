@@ -9,7 +9,7 @@ const ShowRoomList = () => {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/rooms');
+        const response = await axios.get('https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms');
         setRooms(response.data);
       } catch (error) {
         console.error('Error fetching rooms:', error);
