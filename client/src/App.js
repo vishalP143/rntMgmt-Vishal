@@ -5,10 +5,11 @@ import CreateRoom from './components/CreateRoom';
 import HomePage from './components/HomePage';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import AboutUs from './components/AboutUs';
-import ShowRoomList from './components/ShowRoomList';
-import ShowRoomDetails from './components/ShowRoomDetails';
-import UpdateRoomInfo from './components/UpdateRoomInfo';
+
+// import AboutUs from './components/AboutUs';
+// import ShowRoomList from './components/ShowRoomList';
+// import ShowRoomDetails from './components/ShowRoomDetails';
+// import UpdateRoomInfo from './components/UpdateRoomInfo';
 
 // Main App Component
 const App = () => {
@@ -34,11 +35,11 @@ const App = () => {
         <Routes>
           {/* Define Routes */}
           <Route path="/" element={<HomePage />} />
-          <Route path="/about-us" element={<AboutUs />} />
+          {/* <Route path="/about-us" element={<AboutUs />} /> */}
           <Route path="/create-room" element={<CreateRoom />} />
-          <Route path="/show-rooms" element={<ShowRoomList />} />
-          <Route path="/show-room/:roomId" element={<ShowRoomDetails />} />
-          <Route path="/update-room/:roomId" element={<UpdateRoomInfo />} />
+          {/* <Route path="/show-rooms" element={<ShowRoomList />} /> */}
+          {/* <Route path="/show-room/:roomId" element={<ShowRoomDetails />} /> */}
+          {/* <Route path="/update-room/:roomId" element={<UpdateRoomInfo />} /> */}
         </Routes>
       </Box>
 
