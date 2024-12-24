@@ -1,75 +1,42 @@
-const RoomModel = require('../models/roomModel');  // Import Room model
+const RoomModel = require('../models/roomModel'); // Import Room model
 
 // Create a new Room
 exports.createRoom = async (req, res) => {
     try {
-        // Destructure fields from the request body
-        const {
-            name,
-            maxcount,
-            phonenumber,
-            rentperday,
-            type,
-            description,
-            location,
-            features,
-            roomIssuedDate,
-            availability
-        } = req.body;
-
-        // Validate required fields
-        if (!name || !maxcount || !phonenumber || !rentperday || !type || !description || !location || !features) {
-            return res.status(400).send({ message: 'All fields are required.' });
-        }
-
-        // Create a new room instance
         const newRoom = new RoomModel({
-            name,
-            maxcount: Number(maxcount),  // Ensure maxcount is a number
-            phonenumber,
-            rentperday: Number(rentperday),  // Ensure rentperday is a number
-            type,
-            description,
-            location,
-            features: features.split(',').map(item => item.trim()),  // Split features into an array and trim
-            roomIssuedDate: roomIssuedDate || Date.now(),  // Default to current date if not provided
-            availability: availability || true  // Default to true if not provided
+            roomNumber: req.body.roomNumber,
+            type: req.body.type,
+            price: req.body.price,
+            isAvailable: req.body.isAvailable,
+            features: req.body.features,
+            bookedDate: req.body.bookedDate,
         });
 
-        // Save the new room to the database
-        const savedRoom = await newRoom.save();
-
-        // Send the saved room as a response
-        res.status(201).send(savedRoom);
+        const savedRoom = await newRoom.save(); // Save the new room to the database
+        res.status(201).send(savedRoom); // Send the saved room as a response
     } catch (err) {
-        console.error('Error saving room:', err);
-        // Send error message if something goes wrong
-        res.status(400).send({ message: err.message });
+        res.status(400).send({ error: err.message }); // Send an error response if something goes wrong
     }
 };
 
-// Retrieve all rooms
+// Get all rooms
 exports.getAllRooms = async (req, res) => {
     try {
-        const rooms = await RoomModel.find();  // Fetch all rooms
-        res.status(200).send(rooms);
+        const allRooms = await RoomModel.find(); // Fetch all rooms from the database
+        res.status(200).send(allRooms); // Send all rooms as a response
     } catch (err) {
-        console.error('Error retrieving rooms:', err);
-        res.status(400).send({ message: err.message });
+        res.status(400).send({ error: err.message }); // Send an error response if something goes wrong
     }
 };
 
-// Retrieve a room by ID
+// Get a room by ID
 exports.getRoomById = async (req, res) => {
     try {
-        const room = await RoomModel.findById(req.params.id);  // Find room by ID
-        if (!room) {
-            return res.status(404).send({ message: 'Room not found.' });
-        }
-        res.status(200).send(room);
+        const roomById = await RoomModel.findById(req.params.id); // Find room by ID
+        if (!roomById) return res.status(404).send({ error: 'Room not found in database' }); // If room is not found, return 404
+        res.status(200).send(roomById); // Send the room as a response
     } catch (err) {
-        console.error('Error retrieving room:', err);
-        res.status(400).send({ message: err.message });
+        res.status(400).send({ error: err.message }); // Send an error response if something goes wrong
     }
 };
 
@@ -78,31 +45,31 @@ exports.updateRoom = async (req, res) => {
     try {
         const updatedRoom = await RoomModel.findByIdAndUpdate(
             req.params.id,
-            req.body,
-            { new: true }  // Return the updated room
+            {
+                roomNumber: req.body.roomNumber,
+                type: req.body.type,
+                price: req.body.price,
+                isAvailable: req.body.isAvailable,
+                features: req.body.features,
+                bookedDate: req.body.bookedDate,
+            },
+            { new: true } // Return the updated room
         );
 
-        if (!updatedRoom) {
-            return res.status(404).send({ message: 'Room not found.' });
-        }
-
-        res.status(200).send(updatedRoom);
+        if (!updatedRoom) return res.status(404).send({ error: 'Room not found in database' }); // If room is not found, return 404
+        res.status(200).send(updatedRoom); // Send the updated room as a response
     } catch (err) {
-        console.error('Error updating room:', err);
-        res.status(400).send({ message: err.message });
+        res.status(400).send({ error: err.message }); // Send an error response if something goes wrong
     }
 };
 
 // Delete a room by ID
 exports.deleteRoom = async (req, res) => {
     try {
-        const deletedRoom = await RoomModel.findByIdAndDelete(req.params.id);  // Delete room by ID
-        if (!deletedRoom) {
-            return res.status(404).send({ message: 'Room not found.' });
-        }
-        res.status(200).send({ message: 'Room deleted successfully.' });
+        const deletedRoom = await RoomModel.findByIdAndDelete(req.params.id); // Find room by ID and delete it
+        if (!deletedRoom) return res.status(404).send({ error: 'Room not found in database' }); // If room is not found, return 404
+        res.status(200).send({ message: 'Room deleted successfully' }); // Send success message
     } catch (err) {
-        console.error('Error deleting room:', err);
-        res.status(400).send({ message: err.message });
+        res.status(400).send({ error: err.message }); // Send an error response if something goes wrong
     }
 };

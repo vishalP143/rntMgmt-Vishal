@@ -1,38 +1,8 @@
-[
-  {
-    "number": 101,
-    "maxcount": 2,
-    "phonenumber": "9876543210",
-    "rentperday": 1500,
-    "type": "Deluxe",
-    "description": "A spacious deluxe room with a great view.",
-    "location": "1st Floor, Block A",
-    "features": ["Free Wi-Fi", "Air Conditioning", "TV", "Mini Bar"],
-    "availability": true,
-    "roomIssuedDate": "2024-12-01"
-  },
-  {
-    "number": 102,
-    "maxcount": 4,
-    "phonenumber": "9876543211",
-    "rentperday": 2000,
-    "type": "Suite",
-    "description": "Luxurious suite with premium amenities.",
-    "location": "2nd Floor, Block B",
-    "features": ["Free Wi-Fi", "Air Conditioning", "TV", "Kitchenette", "Jacuzzi"],
-    "availability": false,
-    "roomIssuedDate": "2024-11-20"
-  },
-  {
-    "number": 103,
-    "maxcount": 1,
-    "phonenumber": "9876543212",
-    "rentperday": 800,
-    "type": "Single",
-    "description": "Cozy single room for solo travelers.",
-    "location": "Ground Floor, Block C",
-    "features": ["Free Wi-Fi", "Fan", "Shared Bathroom"],
-    "availability": true,
-    "roomIssuedDate": "2024-12-15"
-  }
-]
+{
+  "roomNumber": "103A",
+  "type": "Suite",
+  "price": 3000,
+  "isAvailable": false,
+  "features": ["WiFi", "TV", "Mini Bar"],
+  "bookedDate": "2024-12-24"
+}
