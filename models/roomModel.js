@@ -5,41 +5,37 @@ const RoomSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    trim: true, // Removes extra whitespace
+    trim: true,
   },
   type: {
     type: String,
     required: true,
-    enum: ['Single', 'Double', 'Suite'], // Restricts to predefined values
+    enum: ['Single', 'Double', 'Suite'], // Restrict to predefined values
   },
   price: {
     type: Number,
     required: true,
-    min: 0, // Ensures the price is not negative
+    min: 0, // Ensure price is non-negative
   },
   isAvailable: {
     type: Boolean,
-    default: true, // Defaults to available when created
+    default: true,
   },
-  features: {
-    type: [String], // Array of features, e.g., ['WiFi', 'AC', 'TV']
-    default: [],
-  },
-  bookedDate: {
-    type: Date,
-    default: null, // Null if not booked
+  description: {
+    type: String,
+    trim: true,
   },
   createdAt: {
     type: Date,
-    default: Date.now, // Automatically sets creation date
+    default: Date.now,
   },
   updatedAt: {
     type: Date,
-    default: Date.now, // Automatically updates on modification
+    default: Date.now,
   },
 });
 
-// Middleware to update the `updatedAt` field
+// Middleware to update `updatedAt` field before save
 RoomSchema.pre('save', function (next) {
   this.updatedAt = Date.now();
   next();

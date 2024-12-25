@@ -1,172 +1,183 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { Slide, ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import { Link,  } from 'react-router-dom';
 import axios from 'axios';
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  CircularProgress
+} from '@mui/material';
 
-const AddRoom = () => {
-  const navigate = useNavigate();
+const CreateRoom = () => {
+  // const navigate = useNavigate();
   const [room, setRoom] = useState({
     roomNumber: '',
     type: '',
     price: '',
     isAvailable: true,
-    description: ''
+    description: '',
   });
+  const [notification, setNotification] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const onChange = (e) => {
-    setRoom({ ...room, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setRoom({ ...room, [name]: value });
   };
 
-  const onSubmit = (e) => {
+  const showNotification = (type, message) => {
+    setNotification({ type, message });
+    setTimeout(() => setNotification(null), 5000); // Hides notification after 5 seconds
+  };
+
+  const onSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    axios
-      .post('/api/rooms', room)
-      .then((res) => {
-        setRoom({
-          roomNumber: '',
-          type: '',
-          price: '',
-          isAvailable: true,
-          description: ''
-        });
+    const formattedRoom = {
+      ...room,
+      roomNumber: room.roomNumber.trim(),
+      type: room.type.charAt(0).toUpperCase() + room.type.slice(1).toLowerCase(),
+      price: Number(room.price),
+      isAvailable: JSON.parse(room.isAvailable),
+    };
 
-        toast.success('Room added successfully!', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          transition: Slide,
-        });
-
-        setTimeout(() => {
-          navigate('/');
-        }, 5000);
-
-      })
-      .catch((err) => {
-        console.error('Error in AddRoom:', err);
-
-        toast.error('Something went wrong, try again!', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          transition: Slide,
-        });
+    try {
+      await axios.post('https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms', formattedRoom);
+      setRoom({
+        roomNumber: '',
+        type: '',
+        price: '',
+        isAvailable: true,
+        description: '',
       });
+      showNotification('success', 'Room added successfully!');
+      // navigate('/');
+    } catch (err) {
+      console.error('Error in CreateRoom:', err);
+      showNotification('error', 'Failed to add room. Check your input and try again!');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className='AddRoom'>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        transition={Slide}
-      />
+    <Container maxWidth="sm" sx={{ py: 4 }}>
+      {notification && (
+        <Box
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            padding: '15px',
+            textAlign: 'center',
+            fontSize: '16px',
+            zIndex: 1000,
+            color: '#fff',
+            backgroundColor: notification.type === 'success' ? '#28a745' : '#dc3545',
+          }}
+        >
+          {notification.message}
+        </Box>
+      )}
 
-      <div className='container'>
-        <div className='row'>
-          <div className='col-md-8 m-auto'>
-            <br />
-            <Link to='/' className='btn btn-outline-primary float-left'>
-              Show Room List
-            </Link>
-          </div>
-          <div className='col-md-8 m-auto'>
-            <h1 className='display-4 text-center'>Add Room</h1>
-            <p className='lead text-center'>Create a new room</p>
+      <Box mb={4}>
+        <Link to="/" style={{ textDecoration: 'none' }}>
+          <Button variant="outlined" color="primary">
+            Show Room List
+          </Button>
+        </Link>
+      </Box>
 
-            <form noValidate onSubmit={onSubmit}>
-              <div className='form-group'>
-                <input
-                  type='text'
-                  placeholder='Room Number'
-                  name='roomNumber'
-                  className='form-control'
-                  value={room.roomNumber}
-                  onChange={onChange}
-                />
-              </div>
-              <br />
+      <Typography variant="h4" align="center" gutterBottom>
+        Create Room
+      </Typography>
+      <Typography variant="h6" align="center" color="textSecondary" paragraph>
+        Add a new room to the system
+      </Typography>
 
-              <div className='form-group'>
-                <input
-                  type='text'
-                  placeholder='Room Type'
-                  name='type'
-                  className='form-control'
-                  value={room.type}
-                  onChange={onChange}
-                />
-              </div>
-              <br />
+      <form onSubmit={onSubmit}>
+        <TextField
+          label="Room Number"
+          name="roomNumber"
+          fullWidth
+          margin="normal"
+          variant="outlined"
+          value={room.roomNumber}
+          onChange={onChange}
+          required
+        />
 
-              <div className='form-group'>
-                <input
-                  type='number'
-                  placeholder='Price per night'
-                  name='price'
-                  className='form-control'
-                  value={room.price}
-                  onChange={onChange}
-                />
-              </div>
-              <br />
+        <TextField
+          label="Room Type (Single, Double, Suite)"
+          name="type"
+          fullWidth
+          margin="normal"
+          variant="outlined"
+          value={room.type}
+          onChange={onChange}
+          required
+        />
 
-              <div className='form-group'>
-                <textarea
-                  placeholder='Room Description'
-                  name='description'
-                  className='form-control'
-                  value={room.description}
-                  onChange={onChange}
-                />
-              </div>
-              <br />
+        <TextField
+          label="Price per Night"
+          name="price"
+          type="number"
+          fullWidth
+          margin="normal"
+          variant="outlined"
+          value={room.price}
+          onChange={onChange}
+          required
+        />
 
-              <div className='form-group'>
-                <select
-                  name='isAvailable'
-                  className='form-control'
-                  value={room.isAvailable}
-                  onChange={onChange}
-                >
-                  <option value={true}>Available</option>
-                  <option value={false}>Not Available</option>
-                </select>
-              </div>
-              <br />
+        <TextField
+          label="Room Description"
+          name="description"
+          multiline
+          rows={4}
+          fullWidth
+          margin="normal"
+          variant="outlined"
+          value={room.description}
+          onChange={onChange}
+        />
 
-              <input
-                type='submit'
-                className='btn btn-outline-primary btn-block mt-4'
-              />
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+        <FormControl fullWidth margin="normal" variant="outlined">
+          <InputLabel>Availability</InputLabel>
+          <Select
+            name="isAvailable"
+            value={room.isAvailable}
+            onChange={onChange}
+            label="Availability"
+          >
+            <MenuItem value={true}>Available</MenuItem>
+            <MenuItem value={false}>Not Available</MenuItem>
+          </Select>
+        </FormControl>
+
+        <Box sx={{ textAlign: 'center', mt: 4 }}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            size="large"
+            disabled={loading}
+            startIcon={loading ? <CircularProgress size={24} color="inherit" /> : null}
+          >
+            {loading ? 'Creating...' : 'Create Room'}
+          </Button>
+        </Box>
+      </form>
+    </Container>
   );
 };
 
-export default AddRoom;
+export default CreateRoom;

@@ -1,8 +1,7 @@
 {
-  "roomNumber": "103A",
-  "type": "Suite",
-  "price": 3000,
-  "isAvailable": false,
-  "features": ["WiFi", "TV", "Mini Bar"],
-  "bookedDate": "2024-12-24"
+  "roomNumber": "101",
+  "type": "Single",
+  "price": 1200,
+  "isAvailable": true,
+  "description": "A cozy single room with a great view."
 }
