@@ -1,37 +1,48 @@
 const express = require('express');
-const cors = require('cors');
-const dotenv = require("dotenv")
-// const path = require('path');
-
+const cors = require('cors');  // Importing CORS middleware
+const dotenv = require("dotenv");
 const connectDB = require('./config/db'); // Import the database connection function
 const roomRoutes = require('./routes/roomRoutes'); // Import room routes
-dotenv.config({ path: "./config.env"})
-
+dotenv.config({ path: "./config.env" });
 
 const app = express();
 
 // Connect to MongoDB
 connectDB();
 
-app.use(express.json()); // Middleware to parse JSON requests
-app.use(cors());
+// CORS Middleware - allow all origins for testing (adjust as necessary for production)
+app.use(cors());  // Allow all origins (you can specify particular origins here if needed)
+app.use(cors({
+    origin: '*', // Allow all origins (adjust for production)
+}));
 
-app.get("/", (req, res) => {
-    res.send("HomePage Of The Rental Management App"); // Home page route
+// Middleware to parse incoming JSON requests
+app.use(express.json());
+
+// Debugging middleware: logs each incoming request
+app.use((req, res, next) => {
+    console.log(`Request received: ${req.method} ${req.url}`);
+    next();
 });
 
-// SERVE STATIC FILES
-// app.use(express.static(path.join(__dirname, "./client/build")));
-// app.get("*", function (_, res) {
-//     res.sendFile(
-//         path.join(__dirname, "./client/build/index.html"),
-//         function (err) {
-//             res.status(500).send(err);
-//         }
-//     );
-// });
+// Home route
+app.get("/", (req, res) => {
+    res.send("HomePage Of The Rental Management App");
+});
 
-app.use('/api', roomRoutes); // Use room routes with prefix '/api'
+// Use room routes with prefix '/api'
+app.use('/api', roomRoutes);
+
+// Error handling for unhandled routes
+app.use((req, res, next) => {
+    res.status(404).send('Route not found');
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something went wrong!');
+});
 
 const PORT = process.env.PORT || 5000;
 // Start the server
