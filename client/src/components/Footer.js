@@ -6,19 +6,22 @@ const Footer = () => (
   <Box 
     component="footer" 
     sx={{
-      bgcolor: 'background.paper',
-      color: 'text.secondary',
-      py: 4,
-      width: '100%',
+      bgcolor: 'primary.main',
+      color: 'white',
+      py: 2,
+      height: 'auto',
       textAlign: 'center',
-      borderTop: `1px solid ${theme => theme.palette.primary.main}`, // Optional: add a top border
+      borderTop: '1px solid white', // Optional: add a top border for contrast
     }}
   >
     <Typography variant="h6" gutterBottom>
-      Built with ❤️ by Vishal Pradhan
+      Rental Management System
     </Typography>
-    <Typography variant="body2" sx={{ mt: 2 }}>
-      © {new Date().getFullYear()} Bsc Cohort | All Rights Reserved
+    <Typography variant="body2" sx={{ mt: 1 }}>
+      © {new Date().getFullYear()} Powered by Vishal Pradhan | All Rights Reserved
+    </Typography>
+    <Typography variant="caption" sx={{ mt: 1, display: 'block' }}>
+      Simplifying Rental Management with Ease!
     </Typography>
   </Box>
 );

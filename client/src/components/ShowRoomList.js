@@ -1,38 +1,65 @@
-import React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { Button, Typography, Container, Grid, CircularProgress, Box } from '@mui/material';
 
-const ShowRoomList = ({ rooms, onDelete }) => {
-  return (
-    <TableContainer>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Room Number</TableCell>
-            <TableCell>Type</TableCell>
-            <TableCell>Rent</TableCell>
-            <TableCell>Availability</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rooms.map((room) => (
-            <TableRow key={room._id}>
-              <TableCell>{room.room_number}</TableCell>
-              <TableCell>{room.room_type}</TableCell>
-              <TableCell>{room.rent}</TableCell>
-              <TableCell>{room.availability ? 'Available' : 'Rented'}</TableCell>
-              <TableCell>
-                <Button onClick={() => window.location.href = `/rooms/${room._id}`}>View</Button>
-                <Button onClick={() => window.location.href = `/update-room/${room._id}`}>Edit</Button>
-                <Button onClick={() => onDelete(room._id)}>Delete</Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
-};
+import RoomCard from './RoomCard';  // You need to create this component for displaying room details.
+
+function ShowRoomList() {
+    const [rooms, setRooms] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        axios
+        .get(`https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms`)
+        .then((res) => {
+            setRooms(res.data);
+            setLoading(false);
+        })
+        .catch((err) => {
+            console.log('Error from ShowRoomList ->', err);
+            setLoading(false);
+        });
+    }, []);
+
+    return (
+        <Container maxWidth="lg" sx={{ py: 4 }}>
+            <Typography variant="h3" component="h1" color="primary" gutterBottom>
+                Rooms List
+            </Typography>
+            <Button 
+              component={Link}
+              to="/create-room"  // Link to the page where users can add a new room
+              color="primary"
+              variant="contained"
+              sx={{ mb: 4 }}
+            >
+                Add New Room
+            </Button>
+
+            {loading ? (
+                <Box display="flex" justifyContent="center" mt={4}>
+                    <CircularProgress />
+                </Box>
+            ) : (
+                <Grid container spacing={3}>
+                    {rooms.length === 0 ? (
+                        <Grid item xs={12}>
+                            <Typography variant="h6" color="text.secondary">
+                                No Rooms found!
+                            </Typography>
+                        </Grid>
+                    ) : (
+                        rooms.map((room, index) => (
+                            <Grid item xs={12} sm={6} md={4} key={index}>
+                                <RoomCard room={room} />
+                            </Grid>
+                        ))
+                    )}
+                </Grid>
+            )}
+        </Container>
+    );
+}
 
 export default ShowRoomList;

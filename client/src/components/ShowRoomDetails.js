@@ -1,72 +1,161 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography } from '@mui/material';
+import { useParams, Link as RouterLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {
+  Container,
+  Paper,
+  Typography,
+  Grid,
+  Button,
+  Card,
+  CardMedia,
+  Divider,
+  Box,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
-const ShowRoomDetails = ({ roomId, onUpdate, onDelete }) => {
-  const [room, setRoom] = useState(null);
-  const [open, setOpen] = useState(false);
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(4),
+  marginTop: theme.spacing(4),
+  marginBottom: theme.spacing(4),
+  backgroundColor: theme.palette.background.paper,
+  boxShadow: theme.shadows[3],
+}));
+
+const ShowRoomDetails = () => {
+  const [room, setRoom] = useState({});
+  const [openDialog, setOpenDialog] = useState(false);
+  const value = useParams();
+  const id = value.id;
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchRoom = async () => {
-      const response = await axios.get(`/api/rooms/${roomId}`);
-      setRoom(response.data);
-    };
-    fetchRoom();
-  }, [roomId]);
+    if (id) {
+      axios
+        .get(`https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms/${id}`)
+        .then((res) => {
+          setRoom(res.data);
+        })
+        .catch((err) => {
+          console.error("Error fetching room details:", err);
+        });
+    }
+  }, [id]);
 
-  const handleUpdate = async () => {
-    await axios.put(`/api/rooms/${roomId}`, room);
-    onUpdate(room);
-    setOpen(false);
+  const onDeleteClick = () => {
+    setOpenDialog(true);
   };
 
-  const handleDelete = async () => {
-    await axios.delete(`/api/rooms/${roomId}`);
-    onDelete(roomId);
+  const handleDeleteConfirm = () => {
+    axios
+      .delete(`https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms/${id}`)
+      .then((res) => {
+        navigate('/room-list');
+      })
+      .catch((err) => {
+        console.log('Error from ShowRoomDetails_deleteClick', err);
+      });
+    setOpenDialog(false);
   };
 
-  if (!room) return null;
+  const handleDeleteCancel = () => {
+    setOpenDialog(false);
+  };
 
   return (
-    <div>
-      <Typography variant="h4">Room Details</Typography>
-      <Typography>{`Room Number: ${room.room_number}`}</Typography>
-      <Typography>{`Type: ${room.room_type}`}</Typography>
-      <Typography>{`Floor: ${room.floor_number}, Rent: $${room.rent}`}</Typography>
-      <Typography>{`Tenant: ${room.tenant_name || 'No tenant'}`}</Typography>
-      <Button onClick={() => setOpen(true)}>Update</Button>
-      <Button onClick={handleDelete}>Delete</Button>
+    <Container maxWidth="md">
+      <StyledPaper>
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={4}>
+            <Card>
+              <CardMedia
+                component="img"
+                height="300"
+                image="https://images.unsplash.com/photo-1495446815901-a7297e633e8d" // Replace with room-related image if available
+                alt={room.room_number}
+              />
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={8}>
+            <Typography variant="h4" component="h1" gutterBottom>
+              Room {room.room_number}
+            </Typography>
+            <Typography variant="h6" color="textSecondary" gutterBottom>
+              {room.room_type} - {room.building_name}
+            </Typography>
+            <Divider sx={{ my: 2 }} />
+            <Box display="flex" flexDirection="column">
+              <Typography variant="body1" paragraph>Room Number: {room.room_number}</Typography>
+              <Typography variant="body1">Floor: {room.floor_number}</Typography>
+              <Typography variant="body1">Building: {room.building_name}</Typography>
+              <Typography variant="body1">Rent: ${room.rent}</Typography>
+              <Typography variant="body1">Availability: {room.availability ? 'Available' : 'Occupied'}</Typography>
+              <Typography variant="body1">Tenant: {room.tenant_name || 'N/A'}</Typography>
+              <Typography variant="body1">Tenant Email: {room.tenant_email || 'N/A'}</Typography>
+              <Typography variant="body1">Lease Start Date: {room.lease_start}</Typography>
+              <Typography variant="body1">Lease End Date: {room.lease_end}</Typography>
+            </Box>
+          </Grid>
+        </Grid>
+        <Box mt={4} display="flex" justifyContent="space-between">
+          <Button
+            startIcon={<ArrowBackIcon />}
+            component={RouterLink}
+            to="/room-list"
+            variant="outlined"
+          >
+            Back to Room List
+          </Button>
+          <Box>
+            <Button
+              startIcon={<EditIcon />}
+              component={RouterLink}
+              to={`/edit-room/${room._id}`}
+              variant="contained"
+              color="primary"
+              sx={{ mr: 1 }}
+            >
+              Edit Room
+            </Button>
+            <Button
+              startIcon={<DeleteIcon />}
+              onClick={onDeleteClick}
+              variant="contained"
+              color="error"
+            >
+              Delete Room
+            </Button>
+          </Box>
+        </Box>
+      </StyledPaper>
 
-      <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogTitle>Update Room</DialogTitle>
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={openDialog}
+        onClose={handleDeleteCancel}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Confirm Deletion"}</DialogTitle>
         <DialogContent>
-          <TextField
-            label="Room Number"
-            value={room.room_number}
-            onChange={(e) => setRoom({ ...room, room_number: e.target.value })}
-          />
-          <TextField
-            label="Floor Number"
-            value={room.floor_number}
-            onChange={(e) => setRoom({ ...room, floor_number: e.target.value })}
-          />
-          <TextField
-            label="Rent"
-            value={room.rent}
-            onChange={(e) => setRoom({ ...room, rent: e.target.value })}
-          />
-          <TextField
-            label="Tenant Name"
-            value={room.tenant_name}
-            onChange={(e) => setRoom({ ...room, tenant_name: e.target.value })}
-          />
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this room? This action cannot be undone.
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleUpdate}>Update</Button>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button onClick={handleDeleteCancel} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteConfirm} color="error" autoFocus>
+            Delete
+          </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </Container>
   );
 };
 
