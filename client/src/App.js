@@ -19,7 +19,7 @@ const App = () => {
 
   useEffect(() => {
     const fetchRooms = async () => {
-      const response = await axios.get('/api/rooms');
+      const response = await axios.get('https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms');
       setRooms(response.data);
     };
 
@@ -38,13 +38,13 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <Router>
         <CssBaseline />
-        <AppBar position="sticky">
+        {/* <AppBar position="sticky">
           <Toolbar>
             <Typography variant="h6" sx={{ flexGrow: 1 }}>
-              Rental Management System
+              Rental Management Systemss
             </Typography>
           </Toolbar>
-        </AppBar>
+        </AppBar> */}
 
         <Navbar />
 
@@ -53,10 +53,10 @@ const App = () => {
             <Route path="/" element={<HomePage rooms={rooms} />} />
             <Route path="/create-room" element={<CreateRoom />} />
             <Route path="/rooms" element={<ShowRoomList rooms={rooms} onDelete={handleDeleteRoom} />} />
-            <Route path="/rooms/:roomId" element={<ShowRoomDetails onUpdate={handleUpdateRoom} onDelete={handleDeleteRoom} />} />
+            <Route path="/rooms/:id" element={<ShowRoomDetails onUpdate={handleUpdateRoom} onDelete={handleDeleteRoom} />} />
             <Route path="/export" element={<ExportPage rooms={rooms} />} />
             <Route path="/qr-code/:roomId" element={<QRCodePage />} />
-            <Route path="/update-room/:roomId" element={<UpdateRoomInfo onUpdate={handleUpdateRoom} />} />
+            <Route path="/edit-room/:id" element={<UpdateRoomInfo onUpdate={handleUpdateRoom} />} />
             <Route path="/search" element={<SearchRooms onSearch={setRooms} />} />
           </Routes>
         </Container>

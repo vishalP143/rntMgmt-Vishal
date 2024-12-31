@@ -53,7 +53,7 @@ function UpdateRoomInfo() {
     axios
       .put(`https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms/${id}`, data)
       .then((res) => {
-        navigate(`/room-details/${id}`);
+        navigate(`/rooms/${id}`);
       })
       .catch((err) => {
         console.log('Error in UpdateRoomInfo PUT request');

@@ -25,7 +25,7 @@ const Homepage = () => {
                     <Grid item>
                         <Button
                             component={Link}
-                            to="/room-list"
+                            to="/rooms"
                             color="primary"
                             variant="contained"
                             sx={{ width: { xs: '100%', sm: 'auto' } }}

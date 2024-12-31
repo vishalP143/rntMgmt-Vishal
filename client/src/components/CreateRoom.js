@@ -29,10 +29,11 @@ const CreateRoom = () => {
 
     const onSubmit = (e) => {
         e.preventDefault();
+        console.log(room)
         axios
             .post('https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms', room)
             .then((res) => {
-                console.log(res.data);
+                console.log(res);
                 alert('Room created successfully!');
                 setRoom({
                     room_number: '',

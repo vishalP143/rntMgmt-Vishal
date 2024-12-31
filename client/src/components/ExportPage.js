@@ -15,7 +15,7 @@ const ExportPage = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get('/api/rooms')
+        axios.get('https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms')
             .then(res => {
                 setRooms(res.data);
                 setLoading(false);

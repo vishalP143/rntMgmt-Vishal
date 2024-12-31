@@ -9,7 +9,12 @@ exports.createRoom = async (req, res) => {
             building_name: req.body.building_name,
             room_type: req.body.room_type,
             rent: req.body.rent,
-            availability: req.body.availability
+            availability: req.body.availability,
+            tenant_name: req.body.tenant_name || null,  // Optional tenant name
+            tenant_email: req.body.tenant_email || null, // Optional tenant email
+            tenant_phone: req.body.tenant_phone || null, // Optional tenant phone
+            lease_start_date: req.body.lease_start_date || null, // Optional lease start date
+            lease_end_date: req.body.lease_end_date || null // Optional lease end date
         });
         newRoom = await newRoom.save();
         res.status(201).send(newRoom);  // Return newly created room

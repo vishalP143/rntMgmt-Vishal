@@ -45,6 +45,14 @@ const neonGlowTheme = createTheme({
       primary: neonGlowColors.textPrimary,
       secondary: neonGlowColors.textSecondary,
     },
+  },MuiCssBaseline: {
+    styleOverrides: `
+      @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;700&display=swap');
+      body {
+        background: linear-gradient(180deg, #0d0f17 0%, #16191f 100%);
+        color: ${neonGlowColors.textPrimary};
+      }
+    `,
   },
   typography: {
     fontFamily: '"Poppins", "Roboto", "Arial", sans-serif',
@@ -91,15 +99,7 @@ const neonGlowTheme = createTheme({
         },
       },
     },
-    MuiCssBaseline: {
-      styleOverrides: `
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;700&display=swap');
-        body {
-          background: linear-gradient(180deg, #0d0f17 0%, #16191f 100%);
-          color: ${neonGlowColors.textPrimary};
-        }
-      `,
-    },
+    
   },
 });
 

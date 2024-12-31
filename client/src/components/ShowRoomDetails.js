@@ -54,10 +54,10 @@ const ShowRoomDetails = () => {
     axios
       .delete(`https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms/${id}`)
       .then((res) => {
-        navigate('/room-list');
+        navigate('/rooms');
       })
       .catch((err) => {
-        console.log('Error from ShowRoomDetails_deleteClick', err);
+        console.log('Error from ShowStudentDetails_deleteClick',err);
       });
     setOpenDialog(false);
   };
@@ -121,14 +121,28 @@ const ShowRoomDetails = () => {
             >
               Edit Room
             </Button>
-            <Button
-              startIcon={<DeleteIcon />}
-              onClick={onDeleteClick}
-              variant="contained"
-              color="error"
-            >
-              Delete Room
-            </Button>
+            <Dialog
+        open={openDialog}
+        onClose={handleDeleteCancel}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Confirm Deletion"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this student? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteConfirm} color="error" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
           </Box>
         </Box>
       </StyledPaper>

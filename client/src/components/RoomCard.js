@@ -47,7 +47,7 @@ const RoomCard = ({ room }) => {
             <Box sx={{ p: 2, mt: 'auto' }}>
                 <Button
                     component={Link}
-                    to={`/room-details/${room._id}`}
+                    to={`/rooms/${room._id}`}
                     variant='contained'
                     color='primary'
                     size='small'
