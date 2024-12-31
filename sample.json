@@ -1,0 +1,29 @@
+{
+    "available_room": {
+      "room_number": "101",
+      "floor_number": 1,
+      "building_name": "Alpha Building",
+      "room_type": "Single",
+      "rent": 1200,
+      "availability": true,
+      "tenant_name": null,
+      "tenant_email": null,
+      "tenant_phone": null,
+      "lease_start_date": null,
+      "lease_end_date": null
+    },
+    "occupied_room": {
+      "room_number": "102",
+      "floor_number": 1,
+      "building_name": "Alpha Building",
+      "room_type": "Double",
+      "rent": 2000,
+      "availability": false,
+      "tenant_name": "John Doe",
+      "tenant_email": "johndoe@example.com",
+      "tenant_phone": "123-456-7890",
+      "lease_start_date": "2024-01-01T00:00:00.000Z",
+      "lease_end_date": "2024-12-31T00:00:00.000Z"
+    }
+  }
+  
