@@ -59,7 +59,7 @@ const Homepage = () => {
                         <Button
                             color="primary"
                             component="a"
-                            href="https://github.com/suman492/rentalMgmtSystem"
+                            href="https://github.com/vishalP143/rntMgmt-Vishal"
                             target="_blank"
                             variant="contained"
                             rel="noopener noreferrer"
