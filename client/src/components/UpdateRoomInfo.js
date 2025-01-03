@@ -9,7 +9,12 @@ function UpdateRoomInfo() {
     building_name: '',
     room_type: '',
     rent: '',
-    availability: false, // Assuming boolean for availability
+    availability: true, // Default to true
+    tenant_name: '',
+    tenant_email: '',
+    tenant_phone: '',
+    lease_start: '',
+    lease_end: '',
   });
 
   const { id } = useParams();
@@ -19,45 +24,28 @@ function UpdateRoomInfo() {
     axios
       .get(`https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms/${id}`)
       .then((res) => {
-        setRoom({
-          room_number: res.data.room_number,
-          floor_number: res.data.floor_number,
-          building_name: res.data.building_name,
-          room_type: res.data.room_type,
-          rent: res.data.rent,
-          availability: res.data.availability,
-        });
+        setRoom(res.data);
       })
       .catch((err) => {
-        console.log('Error from UpdateRoomInfo GET request');
-        console.log(err);
+        console.error('Error fetching room details:', err);
       });
   }, [id]);
 
   const onChange = (e) => {
-    setRoom({ ...room, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setRoom({ ...room, [name]: value });
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
 
-    const data = {
-      room_number: room.room_number,
-      floor_number: room.floor_number,
-      building_name: room.building_name,
-      room_type: room.room_type,
-      rent: room.rent,
-      availability: room.availability,
-    };
-
     axios
-      .put(`https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms/${id}`, data)
+      .put(`https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms/${id}`, room)
       .then((res) => {
         navigate(`/rooms/${id}`);
       })
       .catch((err) => {
-        console.log('Error in UpdateRoomInfo PUT request');
-        console.log(err);
+        console.error('Error updating room details:', err);
       });
   };
 
@@ -83,7 +71,6 @@ function UpdateRoomInfo() {
               <label htmlFor="room_number">Room Number</label>
               <input
                 type="text"
-                placeholder="Room number"
                 name="room_number"
                 className="form-control"
                 value={room.room_number}
@@ -96,7 +83,6 @@ function UpdateRoomInfo() {
               <label htmlFor="floor_number">Floor Number</label>
               <input
                 type="text"
-                placeholder="Floor number"
                 name="floor_number"
                 className="form-control"
                 value={room.floor_number}
@@ -109,7 +95,6 @@ function UpdateRoomInfo() {
               <label htmlFor="building_name">Building Name</label>
               <input
                 type="text"
-                placeholder="Building name"
                 name="building_name"
                 className="form-control"
                 value={room.building_name}
@@ -122,7 +107,6 @@ function UpdateRoomInfo() {
               <label htmlFor="room_type">Room Type</label>
               <input
                 type="text"
-                placeholder="Room type (e.g., Single, Double)"
                 name="room_type"
                 className="form-control"
                 value={room.room_type}
@@ -135,7 +119,6 @@ function UpdateRoomInfo() {
               <label htmlFor="rent">Rent</label>
               <input
                 type="number"
-                placeholder="Rent amount"
                 name="rent"
                 className="form-control"
                 value={room.rent}
@@ -158,11 +141,69 @@ function UpdateRoomInfo() {
             </div>
             <br />
 
+            <div className="form-group">
+              <label htmlFor="tenant_name">Tenant Name</label>
+              <input
+                type="text"
+                name="tenant_name"
+                className="form-control"
+                value={room.tenant_name}
+                onChange={onChange}
+              />
+            </div>
+            <br />
+
+            <div className="form-group">
+              <label htmlFor="tenant_email">Tenant Email</label>
+              <input
+                type="email"
+                name="tenant_email"
+                className="form-control"
+                value={room.tenant_email}
+                onChange={onChange}
+              />
+            </div>
+            <br />
+
+            <div className="form-group">
+              <label htmlFor="tenant_phone">Tenant Phone</label>
+              <input
+                type="text"
+                name="tenant_phone"
+                className="form-control"
+                value={room.tenant_phone}
+                onChange={onChange}
+              />
+            </div>
+            <br />
+
+            <div className="form-group">
+              <label htmlFor="lease_start">Lease Start Date</label>
+              <input
+                type="date"
+                name="lease_start"
+                className="form-control"
+                value={room.lease_start}
+                onChange={onChange}
+              />
+            </div>
+            <br />
+
+            <div className="form-group">
+              <label htmlFor="lease_end">Lease End Date</label>
+              <input
+                type="date"
+                name="lease_end"
+                className="form-control"
+                value={room.lease_end}
+                onChange={onChange}
+              />
+            </div>
+            <br />
+
             <button type="submit" className="btn btn-outline-info btn-lg btn-block">
               Update Room
             </button>
-            <br />
-            <br />
           </form>
         </div>
       </div>

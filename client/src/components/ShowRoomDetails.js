@@ -11,12 +11,16 @@ import {
   CardMedia,
   Divider,
   Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
@@ -27,44 +31,54 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 }));
 
 const ShowRoomDetails = () => {
-  const [room, setRoom] = useState({});
+  const [room, setRoom] = useState(null);
+  const [error, setError] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
-  const value = useParams();
-  const id = value.id;
+  const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (id) {
       axios
         .get(`https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms/${id}`)
-        .then((res) => {
-          setRoom(res.data);
-        })
-        .catch((err) => {
-          console.error("Error fetching room details:", err);
-        });
+        .then((res) => setRoom(res.data))
+        .catch((err) => setError('Failed to load room details.'));
     }
   }, [id]);
 
-  const onDeleteClick = () => {
-    setOpenDialog(true);
-  };
-
-  const handleDeleteConfirm = () => {
+  const handleDelete = () => {
     axios
       .delete(`https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms/${id}`)
-      .then((res) => {
-        navigate('/rooms');
-      })
-      .catch((err) => {
-        console.log('Error from ShowStudentDetails_deleteClick',err);
-      });
+      .then(() => navigate('/rooms'))
+      .catch(() => setError('Failed to delete the room.'));
     setOpenDialog(false);
   };
 
-  const handleDeleteCancel = () => {
-    setOpenDialog(false);
-  };
+  const formatDate = (date) => (date ? new Date(date).toLocaleDateString() : 'N/A');
+
+  if (error) {
+    return (
+      <Container maxWidth="md">
+        <StyledPaper>
+          <Typography color="error" variant="h5" align="center">
+            {error}
+          </Typography>
+        </StyledPaper>
+      </Container>
+    );
+  }
+
+  if (!room) {
+    return (
+      <Container maxWidth="md">
+        <StyledPaper>
+          <Typography variant="h5" align="center">
+            Loading room details...
+          </Typography>
+        </StyledPaper>
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="md">
@@ -75,8 +89,11 @@ const ShowRoomDetails = () => {
               <CardMedia
                 component="img"
                 height="300"
-                image="https://images.unsplash.com/photo-1495446815901-a7297e633e8d" // Replace with room-related image if available
-                alt={room.room_number}
+                image="https://images.unsplash.com/photo-1495446815901-a7297e633e8d"
+                alt={room.room_number || 'Room Image'}
+                onError={(e) => {
+                  e.target.src = 'https://via.placeholder.com/300x200?text=No+Image';
+                }}
               />
             </Card>
           </Grid>
@@ -88,16 +105,18 @@ const ShowRoomDetails = () => {
               {room.room_type} - {room.building_name}
             </Typography>
             <Divider sx={{ my: 2 }} />
-            <Box display="flex" flexDirection="column">
-              <Typography variant="body1" paragraph>Room Number: {room.room_number}</Typography>
+            <Box>
+              <Typography variant="body1">Room Number: {room.room_number}</Typography>
               <Typography variant="body1">Floor: {room.floor_number}</Typography>
               <Typography variant="body1">Building: {room.building_name}</Typography>
               <Typography variant="body1">Rent: ${room.rent}</Typography>
-              <Typography variant="body1">Availability: {room.availability ? 'Available' : 'Occupied'}</Typography>
+              <Typography variant="body1">
+                Availability: {room.availability ? 'Available' : 'Occupied'}
+              </Typography>
               <Typography variant="body1">Tenant: {room.tenant_name || 'N/A'}</Typography>
               <Typography variant="body1">Tenant Email: {room.tenant_email || 'N/A'}</Typography>
-              <Typography variant="body1">Lease Start Date: {room.lease_start}</Typography>
-              <Typography variant="body1">Lease End Date: {room.lease_end}</Typography>
+              <Typography variant="body1">Lease Start Date: {formatDate(room.lease_start)}</Typography>
+              <Typography variant="body1">Lease End Date: {formatDate(room.lease_end)}</Typography>
             </Box>
           </Grid>
         </Grid>
@@ -121,28 +140,14 @@ const ShowRoomDetails = () => {
             >
               Edit Room
             </Button>
-            <Dialog
-        open={openDialog}
-        onClose={handleDeleteCancel}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"Confirm Deletion"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete this student? This action cannot be undone.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDeleteCancel} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleDeleteConfirm} color="error" autoFocus>
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
-
+            <Button
+              startIcon={<DeleteIcon />}
+              variant="outlined"
+              color="error"
+              onClick={() => setOpenDialog(true)}
+            >
+              Delete Room
+            </Button>
           </Box>
         </Box>
       </StyledPaper>
@@ -150,7 +155,7 @@ const ShowRoomDetails = () => {
       {/* Delete Confirmation Dialog */}
       <Dialog
         open={openDialog}
-        onClose={handleDeleteCancel}
+        onClose={() => setOpenDialog(false)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -161,10 +166,10 @@ const ShowRoomDetails = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDeleteCancel} color="primary">
+          <Button onClick={() => setOpenDialog(false)} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleDeleteConfirm} color="error" autoFocus>
+          <Button onClick={handleDelete} color="error" autoFocus>
             Delete
           </Button>
         </DialogActions>
