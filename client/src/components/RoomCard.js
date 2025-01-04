@@ -22,7 +22,7 @@ const RoomCard = ({ room }) => {
             <CardMedia
                 component="img"
                 height="200"
-                image="https://via.placeholder.com/400x200?text=Room+Image"
+                image="https://via.placeholder.com/040x200?text=Room+Image"
                 alt="Room"
             />
 

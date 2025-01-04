@@ -1,214 +1,244 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { TextField, MenuItem, Button, FormControlLabel, Checkbox, Container, Typography, Grid, Paper } from '@mui/material';
 
-function UpdateRoomInfo() {
-  const [room, setRoom] = useState({
-    room_number: '',
-    floor_number: '',
-    building_name: '',
-    room_type: '',
-    rent: '',
-    availability: true, // Default to true
-    tenant_name: '',
-    tenant_email: '',
-    tenant_phone: '',
-    lease_start: '',
-    lease_end: '',
-  });
+const UpdateRoomInfo = () => {
+    const navigate = useNavigate();
+    const { id } = useParams();
+    const [room, setRoom] = useState({
+        room_number: '',
+        floor_number: '',
+        building_name: '',
+        room_type: 'Single',
+        rent: '',
+        availability: true,
+        tenant_name: '',
+        tenant_email: '',
+        tenant_phone: '',
+        lease_start_date: '',
+        lease_end_date: '',
+    });
 
-  const { id } = useParams();
-  const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
-  useEffect(() => {
-    axios
-      .get(`https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms/${id}`)
-      .then((res) => {
-        setRoom(res.data);
-      })
-      .catch((err) => {
-        console.error('Error fetching room details:', err);
-      });
-  }, [id]);
+    useEffect(() => {
+        axios
+            .get(`https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms/${id}`)
+            .then((res) => {
+                setRoom(res.data);
+            })
+            .catch((err) => {
+                console.error('Error fetching room details:', err);
+            });
+    }, [id]);
 
-  const onChange = (e) => {
-    const { name, value } = e.target;
-    setRoom({ ...room, [name]: value });
-  };
+    const onChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setRoom({
+            ...room,
+            [name]: type === 'checkbox' ? checked : value,
+        });
+    };
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+    const onSubmit = (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
 
-    axios
-      .put(`https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms/${id}`, room)
-      .then((res) => {
-        navigate(`/rooms/${id}`);
-      })
-      .catch((err) => {
-        console.error('Error updating room details:', err);
-      });
-  };
+        // Validate rent
+        if (room.rent <= 0) {
+            setError('Rent must be a positive number.');
+            setLoading(false);
+            return;
+        }
 
-  return (
-    <div className="UpdateRoomInfo">
-      <div className="container" style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-        <div className="row">
-          <div className="col-md-8 m-auto">
-            <br />
-            <Link to="/room-list" className="btn btn-outline-warning float-left">
-              Show Room List
-            </Link>
-          </div>
-          <div className="col-md-8 m-auto">
-            <h1 className="display-4 text-center">Edit Room</h1>
-            <p className="lead text-center">Update Room's Info</p>
-          </div>
-        </div>
+        // Validate lease dates
+        if (room.lease_start_date && room.lease_end_date && new Date(room.lease_start_date) > new Date(room.lease_end_date)) {
+            setError('Lease start date cannot be later than the lease end date.');
+            setLoading(false);
+            return;
+        }
 
-        <div className="col-md-8 m-auto">
-          <form noValidate onSubmit={onSubmit}>
-            <div className="form-group">
-              <label htmlFor="room_number">Room Number</label>
-              <input
-                type="text"
-                name="room_number"
-                className="form-control"
-                value={room.room_number}
-                onChange={onChange}
-              />
-            </div>
-            <br />
+        axios
+            .put(`https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms/${id}`, room)
+            .then(() => {
+                alert('Room updated successfully!');
+                navigate(`/rooms/${id}`);
+            })
+            .catch((err) => {
+                const errorMessage = err.response?.data || 'Failed to update room. Please try again.';
+                setError(errorMessage);
+            })
+            .finally(() => setLoading(false));
+    };
 
-            <div className="form-group">
-              <label htmlFor="floor_number">Floor Number</label>
-              <input
-                type="text"
-                name="floor_number"
-                className="form-control"
-                value={room.floor_number}
-                onChange={onChange}
-              />
-            </div>
-            <br />
+    return (
+        <Container maxWidth="sm" sx={{ my: 5 }}>
+            <Typography variant="h4" align="center" gutterBottom>
+                Update Room
+            </Typography>
+            <Paper sx={{ padding: 3 }}>
+                <form onSubmit={onSubmit}>
+                    {/* Room Number */}
+                    <TextField
+                        label="Room Number *"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        name="room_number"
+                        value={room.room_number}
+                        onChange={onChange}
+                        required
+                    />
 
-            <div className="form-group">
-              <label htmlFor="building_name">Building Name</label>
-              <input
-                type="text"
-                name="building_name"
-                className="form-control"
-                value={room.building_name}
-                onChange={onChange}
-              />
-            </div>
-            <br />
+                    {/* Floor Number */}
+                    <TextField
+                        label="Floor Number *"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        name="floor_number"
+                        type="number"
+                        value={room.floor_number}
+                        onChange={onChange}
+                        required
+                    />
 
-            <div className="form-group">
-              <label htmlFor="room_type">Room Type</label>
-              <input
-                type="text"
-                name="room_type"
-                className="form-control"
-                value={room.room_type}
-                onChange={onChange}
-              />
-            </div>
-            <br />
+                    {/* Building Name */}
+                    <TextField
+                        label="Building Name *"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        name="building_name"
+                        value={room.building_name}
+                        onChange={onChange}
+                        required
+                    />
 
-            <div className="form-group">
-              <label htmlFor="rent">Rent</label>
-              <input
-                type="number"
-                name="rent"
-                className="form-control"
-                value={room.rent}
-                onChange={onChange}
-              />
-            </div>
-            <br />
+                    {/* Room Type */}
+                    <TextField
+                        select
+                        label="Room Type *"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        name="room_type"
+                        value={room.room_type}
+                        onChange={onChange}
+                        required
+                    >
+                        <MenuItem value="Single">Single</MenuItem>
+                        <MenuItem value="Double">Double</MenuItem>
+                        <MenuItem value="Shared">Shared</MenuItem>
+                    </TextField>
 
-            <div className="form-group">
-              <label htmlFor="availability">Availability</label>
-              <select
-                name="availability"
-                className="form-control"
-                value={room.availability}
-                onChange={onChange}
-              >
-                <option value={true}>Available</option>
-                <option value={false}>Occupied</option>
-              </select>
-            </div>
-            <br />
+                    {/* Rent */}
+                    <TextField
+                        label="Rent (₹ per month) *"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        name="rent"
+                        type="number"
+                        value={room.rent}
+                        onChange={onChange}
+                        required
+                    />
 
-            <div className="form-group">
-              <label htmlFor="tenant_name">Tenant Name</label>
-              <input
-                type="text"
-                name="tenant_name"
-                className="form-control"
-                value={room.tenant_name}
-                onChange={onChange}
-              />
-            </div>
-            <br />
+                    {/* Availability */}
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                name="availability"
+                                checked={room.availability}
+                                onChange={onChange}
+                            />
+                        }
+                        label="Available"
+                    />
 
-            <div className="form-group">
-              <label htmlFor="tenant_email">Tenant Email</label>
-              <input
-                type="email"
-                name="tenant_email"
-                className="form-control"
-                value={room.tenant_email}
-                onChange={onChange}
-              />
-            </div>
-            <br />
+                    {/* Tenant Details */}
+                    <Typography variant="h6" gutterBottom>
+                        Tenant Details (Optional)
+                    </Typography>
+                    <TextField
+                        label="Tenant Name"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        name="tenant_name"
+                        value={room.tenant_name}
+                        onChange={onChange}
+                    />
+                    <TextField
+                        label="Tenant Email"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        name="tenant_email"
+                        type="email"
+                        value={room.tenant_email}
+                        onChange={onChange}
+                    />
+                    <TextField
+                        label="Tenant Phone"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        name="tenant_phone"
+                        type="tel"
+                        value={room.tenant_phone}
+                        onChange={onChange}
+                    />
 
-            <div className="form-group">
-              <label htmlFor="tenant_phone">Tenant Phone</label>
-              <input
-                type="text"
-                name="tenant_phone"
-                className="form-control"
-                value={room.tenant_phone}
-                onChange={onChange}
-              />
-            </div>
-            <br />
+                    {/* Lease Dates */}
+                    <Typography variant="h6" gutterBottom>
+                        Lease Dates
+                    </Typography>
+                    <TextField
+                        label="Lease Start Date"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        name="lease_start_date"
+                        type="date"
+                        value={room.lease_start_date}
+                        onChange={onChange}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                    <TextField
+                        label="Lease End Date"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        name="lease_end_date"
+                        type="date"
+                        value={room.lease_end_date}
+                        onChange={onChange}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
 
-            <div className="form-group">
-              <label htmlFor="lease_start">Lease Start Date</label>
-              <input
-                type="date"
-                name="lease_start"
-                className="form-control"
-                value={room.lease_start}
-                onChange={onChange}
-              />
-            </div>
-            <br />
+                    {/* Buttons */}
+                    <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading}>
+                        {loading ? 'Updating...' : 'Update Room'}
+                    </Button>
+                    <Button variant="outlined" color="secondary" fullWidth sx={{ mt: 2 }} onClick={() => navigate('/rooms')}>
+                        Cancel
+                    </Button>
+                </form>
 
-            <div className="form-group">
-              <label htmlFor="lease_end">Lease End Date</label>
-              <input
-                type="date"
-                name="lease_end"
-                className="form-control"
-                value={room.lease_end}
-                onChange={onChange}
-              />
-            </div>
-            <br />
-
-            <button type="submit" className="btn btn-outline-info btn-lg btn-block">
-              Update Room
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
-}
+                {/* Error Message */}
+                {error && <Typography color="error" variant="body2" sx={{ mt: 2 }}>{error}</Typography>}
+            </Paper>
+        </Container>
+    );
+};
 
 export default UpdateRoomInfo;
