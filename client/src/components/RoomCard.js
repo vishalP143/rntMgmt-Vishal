@@ -22,7 +22,7 @@ const RoomCard = ({ room }) => {
             <CardMedia
                 component="img"
                 height="200"
-                image="https://via.placeholder.com/040x200?text=Room+Image"
+                image="https://deepai.org/gallery-item/f5023fe7c1094910ba5091ccc63b75e8/1-japan-minimalist-single-room-with-tatami-ma_wUffsSd.jpg.html"
                 alt="Room"
             />
 

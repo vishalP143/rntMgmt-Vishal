@@ -8,9 +8,13 @@ import {
   Box,
   Menu,
   MenuItem,
+  Slide,
+  useScrollTrigger,
+  Divider,
 } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
-import HouseIcon from '@mui/icons-material/House'; // For room-related icon
+import MeetingRoomIcon from '@mui/icons-material/MeetingRoom'; // Distinct icon for rooms
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline'; // Distinct icon for tenants
 
 const roomPages = [
   { title: 'View Rooms', path: '/room-list' },
@@ -27,6 +31,8 @@ const Navbar = () => {
   const [roomAnchorEl, setRoomAnchorEl] = useState(null);
   const [tenantAnchorEl, setTenantAnchorEl] = useState(null);
 
+  const trigger = useScrollTrigger();
+
   const handleRoomClick = (event) => {
     setRoomAnchorEl(event.currentTarget);
   };
@@ -41,58 +47,85 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static" color="transparent" elevation={0} sx={{ width: '100%' }}>
-      <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'primary.main' }}>
-          Rental Management System
-        </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Button color="primary" component={RouterLink} to="/" startIcon={<HomeIcon />}>
-            Home
-          </Button>
-
-          <Button color="primary" onClick={handleRoomClick} startIcon={<HouseIcon />}>
-            Rooms
-          </Button>
-          <Menu
-            anchorEl={roomAnchorEl}
-            open={Boolean(roomAnchorEl)}
-            onClose={handleClose}
+    <Slide in={!trigger} direction="down">
+      <AppBar position="static" color="default" elevation={2}>
+        <Toolbar sx={{ bgcolor: 'primary.main', color: 'white' }}>
+          <Typography 
+            variant="h5" 
+            sx={{ flexGrow: 1, fontWeight: 'bold', textDecoration: 'none' }}
+            component={RouterLink}
+            to="/"
           >
-            {roomPages.map((page) => (
-              <MenuItem
-                key={page.path}
-                component={RouterLink}
-                to={page.path}
-                onClick={handleClose}
-              >
-                {page.title}
-              </MenuItem>
-            ))}
-          </Menu>
+            Rental Management System
+          </Typography>
 
-          <Button color="primary" onClick={handleTenantClick} startIcon={<HouseIcon />}>
-            Tenants
-          </Button>
-          <Menu
-            anchorEl={tenantAnchorEl}
-            open={Boolean(tenantAnchorEl)}
-            onClose={handleClose}
-          >
-            {tenantPages.map((page) => (
-              <MenuItem
-                key={page.path}
-                component={RouterLink}
-                to={page.path}
-                onClick={handleClose}
-              >
-                {page.title}
-              </MenuItem>
-            ))}
-          </Menu>
-        </Box>
-      </Toolbar>
-    </AppBar>
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <Button
+              color="inherit"
+              component={RouterLink}
+              to="/"
+              startIcon={<HomeIcon />}
+              sx={{ textTransform: 'none' }}
+            >
+              Home
+            </Button>
+            <Button
+              color="inherit"
+              onClick={handleRoomClick}
+              startIcon={<MeetingRoomIcon />}
+              sx={{ textTransform: 'none' }}
+            >
+              Rooms
+            </Button>
+            <Menu
+              anchorEl={roomAnchorEl}
+              open={Boolean(roomAnchorEl)}
+              onClose={handleClose}
+              MenuListProps={{ sx: { bgcolor: 'primary.light' } }}
+            >
+              {roomPages.map((page) => (
+                <MenuItem
+                  key={page.path}
+                  component={RouterLink}
+                  to={page.path}
+                  onClick={handleClose}
+                  sx={{ '&:hover': { bgcolor: 'primary.dark', color: 'white' } }}
+                >
+                  {page.title}
+                </MenuItem>
+              ))}
+            </Menu>
+            <Button
+              color="inherit"
+              onClick={handleTenantClick}
+              startIcon={<PersonOutlineIcon />}
+              sx={{ textTransform: 'none' }}
+            >
+              Tenants
+            </Button>
+            <Menu
+              anchorEl={tenantAnchorEl}
+              open={Boolean(tenantAnchorEl)}
+              onClose={handleClose}
+              MenuListProps={{ sx: { bgcolor: 'primary.light' } }}
+            >
+              {tenantPages.map((page) => (
+                <MenuItem
+                  key={page.path}
+                  component={RouterLink}
+                  to={page.path}
+                  onClick={handleClose}
+                  sx={{ '&:hover': { bgcolor: 'primary.dark', color: 'white' } }}
+                >
+                  {page.title}
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+        </Toolbar>
+        <Divider />
+      </AppBar>
+    </Slide>
   );
 };
 

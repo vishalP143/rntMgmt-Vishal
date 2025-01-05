@@ -1,102 +1,167 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Typography, Button, Box, Grid } from '@mui/material';
+import {
+    Container,
+    Typography,
+    Button,
+    Box,
+    Grid,
+    Card,
+    CardContent,
+    Divider,
+    Slide
+} from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import SearchIcon from '@mui/icons-material/Search';
+import HomeIcon from '@mui/icons-material/Home';
+import AddBusinessIcon from '@mui/icons-material/AddBusiness';
+import BarChartIcon from '@mui/icons-material/BarChart';
 
 const Homepage = () => {
+    const [stats] = useState({
+        totalRooms: 50, // Example data
+        availableRooms: 20,
+        rentedRooms: 30
+    });
+
     return (
         <Container maxWidth="lg" sx={{ py: 5 }}>
-            <Typography 
-                variant="h2" 
-                component="h1" 
-                color="primary" 
-                gutterBottom
-                sx={{ 
-                    fontSize: { xs: '2.5rem', sm: '3rem', md: '4rem' }, 
-                    textAlign: 'center' 
-                }}
-            >
-                Welcome to Rental Management System
-            </Typography>
-
-            <Box mt={4}>
-                <Grid container spacing={2} justifyContent="center">
-                    <Grid item>
-                        <Button
-                            component={Link}
-                            to="/rooms"
-                            color="primary"
-                            variant="contained"
-                            sx={{ width: { xs: '100%', sm: 'auto' } }}
-                        >
-                            View Rooms
-                        </Button>
-                    </Grid>
-                    <Grid item>
-                        <Button
-                            component={Link}
-                            to="/create-room"
-                            color="primary"
-                            variant="contained"
-                            sx={{ width: { xs: '100%', sm: 'auto' } }}
-                        >
-                            Create Room
-                        </Button>
-                    </Grid>
-                    <Grid item>
-                        <Button
-                            component={Link}
-                            to="/export"
-                            color="primary"
-                            variant="contained"
-                            sx={{ width: { xs: '100%', sm: 'auto' } }}
-                        >
-                            Export Data
-                        </Button>
-                    </Grid>
-                    <Grid item>
-                        <Button
-                            color="primary"
-                            component="a"
-                            href="https://github.com/vishalP143/rntMgmt-Vishal"
-                            target="_blank"
-                            variant="contained"
-                            rel="noopener noreferrer"
-                            sx={{ width: { xs: '100%', sm: 'auto' } }}
-                        >
-                            <GitHubIcon sx={{ mr: 1 }} />
-                            GitHub
-                        </Button>
-                    </Grid>
-                    <Grid item>
-                        <Button
-                            color="primary"
-                            component="a"
-                            href="https://docs.google.com/document/d/1ncz3J_GCgqLG-kwAHE2CZamT3bMhtr-RuPqBkiPvU2Q/edit?usp=drive_link"
-                            target="_blank"
-                            variant="contained"
-                            rel="noopener noreferrer"
-                            sx={{ width: { xs: '100%', sm: 'auto' } }}
-                        >
-                            Resume
-                        </Button>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Button
-                            component={Link}
-                            to="/search"
-                            variant="contained"
-                            size="large"
-                            startIcon={<SearchIcon />}
-                            fullWidth
-                            sx={{ py: 2 }}
-                        >
-                            Search Rooms
-                        </Button>
-                    </Grid>
-                </Grid>
+            {/* Welcome Section */}
+            <Box textAlign="center" mb={6}>
+                <Typography 
+                    variant="h3" 
+                    component="h1" 
+                    color="primary" 
+                    gutterBottom
+                >
+                    Welcome to Rental Management System
+                </Typography>
+                <Typography variant="h6" color="text.secondary">
+                    Efficiently manage your rentals with ease
+                </Typography>
             </Box>
+
+            {/* Stats Section */}
+            <Grid container spacing={4} mb={6}>
+                <Grid item xs={12} sm={4}>
+                    <Slide direction="up" in={true} timeout={600}>
+                        <Card sx={{ height: '100%' }}>
+                            <CardContent>
+                                <BarChartIcon color="primary" sx={{ fontSize: 40, mb: 2 }} />
+                                <Typography variant="h4">{stats.totalRooms}</Typography>
+                                <Typography variant="subtitle1" color="text.secondary">
+                                    Total Rooms
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    </Slide>
+                </Grid>
+
+                <Grid item xs={12} sm={4}>
+                    <Slide direction="up" in={true} timeout={800}>
+                        <Card sx={{ height: '100%' }}>
+                            <CardContent>
+                                <HomeIcon color="primary" sx={{ fontSize: 40, mb: 2 }} />
+                                <Typography variant="h4">{stats.availableRooms}</Typography>
+                                <Typography variant="subtitle1" color="text.secondary">
+                                    Available Rooms
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    </Slide>
+                </Grid>
+
+                <Grid item xs={12} sm={4}>
+                    <Slide direction="up" in={true} timeout={1000}>
+                        <Card sx={{ height: '100%' }}>
+                            <CardContent>
+                                <AddBusinessIcon color="primary" sx={{ fontSize: 40, mb: 2 }} />
+                                <Typography variant="h4">{stats.rentedRooms}</Typography>
+                                <Typography variant="subtitle1" color="text.secondary">
+                                    Rented Rooms
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    </Slide>
+                </Grid>
+            </Grid>
+
+            {/* Action Section */}
+            <Grid container spacing={3} justifyContent="center">
+                <Grid item xs={12} sm={6} md={4}>
+                    <Button
+                        component={Link}
+                        to="/rooms"
+                        variant="contained"
+                        size="large"
+                        startIcon={<HomeIcon />}
+                        fullWidth
+                        sx={{ py: 2 }}
+                    >
+                        View Rooms
+                    </Button>
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={4}>
+                    <Button
+                        component={Link}
+                        to="/create-room"
+                        variant="contained"
+                        size="large"
+                        startIcon={<AddBusinessIcon />}
+                        fullWidth
+                        sx={{ py: 2 }}
+                    >
+                        Create Room
+                    </Button>
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={4}>
+                    <Button
+                        component={Link}
+                        to="/export"
+                        variant="contained"
+                        size="large"
+                        startIcon={<BarChartIcon />}
+                        fullWidth
+                        sx={{ py: 2 }}
+                    >
+                        Export Data
+                    </Button>
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={4}>
+                    <Button
+                        component="a"
+                        href="https://github.com/vishalP143/rntMgmt-Vishal"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        variant="contained"
+                        size="large"
+                        startIcon={<GitHubIcon />}
+                        fullWidth
+                        sx={{ py: 2 }}
+                    >
+                        GitHub
+                    </Button>
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={4}>
+                    <Button
+                        component={Link}
+                        to="/search"
+                        variant="contained"
+                        size="large"
+                        startIcon={<SearchIcon />}
+                        fullWidth
+                        sx={{ py: 2 }}
+                    >
+                        Search Rooms
+                    </Button>
+                </Grid>
+            </Grid>
+
+            <Divider sx={{ my: 4 }} />
         </Container>
     );
 };
