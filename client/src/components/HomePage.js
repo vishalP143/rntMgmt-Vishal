@@ -16,6 +16,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import QrCodeIcon from '@mui/icons-material/QrCode';
 
 const Homepage = () => {
     const [stats] = useState({
@@ -159,6 +160,19 @@ const Homepage = () => {
                         Search Rooms
                     </Button>
                 </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+        <Button
+            component={Link}
+            to="/qrcodes"
+            variant="contained"
+            size="large"
+            startIcon={<QrCodeIcon />}
+            fullWidth
+            sx={{ py: 2 }}
+        >
+            QR Codes
+            </Button>
+         </Grid>
             </Grid>
 
             <Divider sx={{ my: 4 }} />

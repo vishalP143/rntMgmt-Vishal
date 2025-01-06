@@ -52,7 +52,7 @@ const App = () => {
                         <Route path="/rooms" element={<ShowRoomList rooms={rooms} onDelete={handleDeleteRoom} />} />
                         <Route path="/rooms/:id" element={<ShowRoomDetails onUpdate={handleUpdateRoom} onDelete={handleDeleteRoom} />} />
                         <Route path="/export" element={<ExportPage rooms={rooms} />} />
-                        <Route path="/qr-code/:roomId" element={<QRCodePage />} />
+                        <Route path="/qrcodes" element={<QRCodePage />} />
                         <Route path="/edit-room/:id" element={<UpdateRoomInfo onUpdate={handleUpdateRoom} />} />
                         <Route path="/search" element={<SearchRooms onSearch={setRooms} />} />
                     </Routes>
