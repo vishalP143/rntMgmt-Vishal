@@ -124,7 +124,7 @@ const ShowRoomDetails = () => {
           <Button
             startIcon={<ArrowBackIcon />}
             component={RouterLink}
-            to="/room-list"
+            to="/rooms"
             variant="outlined"
           >
             Back to Room List
