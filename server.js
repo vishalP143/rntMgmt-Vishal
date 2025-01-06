@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 });
 
 // Home route
-app.get('/h', (req, res) => {
+app.get('/', (req, res) => {
     res.send('HomePage Of The Rental Management App');
 });
 
