@@ -89,7 +89,7 @@ const ShowRoomDetails = () => {
               <CardMedia
                 component="img"
                 height="300"
-                image="https://images.unsplash.com/photo-1495446815901-a7297e633e8d"
+                image="https://roohtravel.com/wp-content/uploads/2023/07/thailand_hotels_with_pool.jpeg"
                 alt={room.room_number || 'Room Image'}
                 onError={(e) => {
                   e.target.src = 'https://via.placeholder.com/300x200?text=No+Image';
