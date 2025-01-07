@@ -13,7 +13,12 @@ const app = express();
 connectDB();
 
 // CORS Middleware
-app.use(cors({ origin: '*' }));
+const corsOptions = {
+    origin: process.env.CLIENT_URL || 'https://your-frontend-domain.com',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+};
+app.use(cors(corsOptions));
 
 // Middleware to parse JSON requests
 app.use(express.json());
