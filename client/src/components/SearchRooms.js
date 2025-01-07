@@ -34,7 +34,7 @@ const SearchRooms = () => {
     });
 
     useEffect(() => {
-        axios.get('https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms')
+        axios.get('https://rntmgmt-vishal.onrender.com/api/rooms')
             .then(res => {
                 setRooms(res.data);
                 setFilteredRooms(res.data);

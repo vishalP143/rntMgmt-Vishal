@@ -62,7 +62,7 @@ const UpdateRoomInfo = () => {
         }
 
         axios
-            .put(`https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms/${id}`, room)
+            .put(`https://rntmgmt-vishal.onrender.com/api/rooms/${id}`, room)
             .then(() => {
                 alert('Room updated successfully!');
                 navigate(`/rooms/${id}`);

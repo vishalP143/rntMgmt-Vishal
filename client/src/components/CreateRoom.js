@@ -50,7 +50,7 @@ const CreateRoom = () => {
         }
 
         axios
-            .post('https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms', room)
+            .post('https://rntmgmt-vishal.onrender.com/api/rooms', room)
             .then(() => {
                 alert('Room created successfully!');
                 setRoom({

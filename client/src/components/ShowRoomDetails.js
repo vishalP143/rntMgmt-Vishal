@@ -48,7 +48,7 @@ const ShowRoomDetails = () => {
 
   const handleDelete = () => {
     axios
-      .delete(`https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms/${id}`)
+      .delete(`https://rntmgmt-vishal.onrender.com/api/rooms/${id}`)
       .then(() => navigate('/rooms'))
       .catch(() => setError('Failed to delete the room.'));
     setOpenDialog(false);
