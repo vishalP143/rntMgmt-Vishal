@@ -3,6 +3,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const roomRoutes = require('./routes/roomRoutes');
+const path = require('path');
 
 dotenv.config({ path: './config.env' });
 
@@ -24,13 +25,23 @@ app.use((req, res, next) => {
     next();
 });
 
-// Home route
-app.get('/', (req, res) => {
-    res.send('HomePage Of The Rental Management App');
-});
-
 // Room routes
 app.use('/api', roomRoutes);
+
+// Serve frontend for production
+if (process.env.NODE_ENV === 'production') {
+    const clientBuildPath = path.join(__dirname, 'client', 'build');
+    app.use(express.static(clientBuildPath));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(clientBuildPath, 'index.html'));
+    });
+} else {
+    // Home route for development
+    app.get('/', (req, res) => {
+        res.send('HomePage Of The Rental Management App');
+    });
+}
 
 // 404 Error Handling for undefined routes
 app.use((req, res) => {
