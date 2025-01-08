@@ -25,7 +25,7 @@ const UpdateRoomInfo = () => {
 
     useEffect(() => {
         axios
-            .get(`https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms/${id}`)
+            .get(`https://rntmgmt-vishal.onrender.com/api/rooms/${id}`)
             .then((res) => {
                 setRoom(res.data);
             })
