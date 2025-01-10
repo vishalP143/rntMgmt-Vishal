@@ -17,6 +17,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import QrCodeIcon from '@mui/icons-material/QrCode';
+import BackgroundImage from '../assets/home-bg.jpg'; // Add the background image here
 
 const Homepage = () => {
     const [stats] = useState({
@@ -26,157 +27,82 @@ const Homepage = () => {
     });
 
     return (
-        <Container maxWidth="lg" sx={{ py: 5 }}>
-            {/* Welcome Section */}
-            <Box textAlign="center" mb={6}>
-                <Typography 
-                    variant="h3" 
-                    component="h1" 
-                    color="primary" 
-                    gutterBottom
-                >
-                    Welcome to Rental Management System
-                </Typography>
-                <Typography variant="h6" color="text.secondary">
-                    Efficiently manage your rentals with ease
-                </Typography>
-            </Box>
-
-            {/* Stats Section */}
-            <Grid container spacing={4} mb={6}>
-                <Grid item xs={12} sm={4}>
-                    <Slide direction="up" in={true} timeout={600}>
-                        <Card sx={{ height: '100%' }}>
-                            <CardContent>
-                                <BarChartIcon color="primary" sx={{ fontSize: 40, mb: 2 }} />
-                                <Typography variant="h4">{stats.totalRooms}</Typography>
-                                <Typography variant="subtitle1" color="text.secondary">
-                                    Total Rooms
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Slide>
-                </Grid>
-
-                <Grid item xs={12} sm={4}>
-                    <Slide direction="up" in={true} timeout={800}>
-                        <Card sx={{ height: '100%' }}>
-                            <CardContent>
-                                <HomeIcon color="primary" sx={{ fontSize: 40, mb: 2 }} />
-                                <Typography variant="h4">{stats.availableRooms}</Typography>
-                                <Typography variant="subtitle1" color="text.secondary">
-                                    Available Rooms
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Slide>
-                </Grid>
-
-                <Grid item xs={12} sm={4}>
-                    <Slide direction="up" in={true} timeout={1000}>
-                        <Card sx={{ height: '100%' }}>
-                            <CardContent>
-                                <AddBusinessIcon color="primary" sx={{ fontSize: 40, mb: 2 }} />
-                                <Typography variant="h4">{stats.rentedRooms}</Typography>
-                                <Typography variant="subtitle1" color="text.secondary">
-                                    Rented Rooms
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Slide>
-                </Grid>
-            </Grid>
-
-            {/* Action Section */}
-            <Grid container spacing={3} justifyContent="center">
-                <Grid item xs={12} sm={6} md={4}>
-                    <Button
-                        component={Link}
-                        to="/rooms"
-                        variant="contained"
-                        size="large"
-                        startIcon={<HomeIcon />}
-                        fullWidth
-                        sx={{ py: 2 }}
-                    >
-                        View Rooms
-                    </Button>
-                </Grid>
-
-                <Grid item xs={12} sm={6} md={4}>
-                    <Button
-                        component={Link}
-                        to="/create-room"
-                        variant="contained"
-                        size="large"
-                        startIcon={<AddBusinessIcon />}
-                        fullWidth
-                        sx={{ py: 2 }}
-                    >
-                        Create Room
-                    </Button>
-                </Grid>
-
-                <Grid item xs={12} sm={6} md={4}>
-                    <Button
-                        component={Link}
-                        to="/export"
-                        variant="contained"
-                        size="large"
-                        startIcon={<BarChartIcon />}
-                        fullWidth
-                        sx={{ py: 2 }}
-                    >
-                        Export Data
-                    </Button>
-                </Grid>
-
-                <Grid item xs={12} sm={6} md={4}>
-                    <Button
-                        component="a"
-                        href="https://github.com/vishalP143/rntMgmt-Vishal"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        variant="contained"
-                        size="large"
-                        startIcon={<GitHubIcon />}
-                        fullWidth
-                        sx={{ py: 2 }}
-                    >
-                        GitHub
-                    </Button>
-                </Grid>
-
-                <Grid item xs={12} sm={6} md={4}>
-                    <Button
-                        component={Link}
-                        to="/search"
-                        variant="contained"
-                        size="large"
-                        startIcon={<SearchIcon />}
-                        fullWidth
-                        sx={{ py: 2 }}
-                    >
-                        Search Rooms
-                    </Button>
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-        <Button
-            component={Link}
-            to="/qrcodes"
-            variant="contained"
-            size="large"
-            startIcon={<QrCodeIcon />}
-            fullWidth
-            sx={{ py: 2 }}
+        <Box
+            sx={{
+                backgroundImage: `url(${BackgroundImage})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                minHeight: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                color: 'white',
+            }}
         >
-            QR Codes
-            </Button>
-         </Grid>
-            </Grid>
+            <Container maxWidth="lg">
+                {/* Welcome Section */}
+                <Box textAlign="center" mb={6}>
+                    <Typography variant="h3" component="h1" gutterBottom>
+                        Welcome to Rental Management System
+                    </Typography>
+                    <Typography variant="h6">
+                        Efficiently manage your rentals with ease
+                    </Typography>
+                </Box>
 
-            <Divider sx={{ my: 4 }} />
-        </Container>
+                {/* Stats Section */}
+                <Grid container spacing={4} mb={6}>
+                    {[
+                        { icon: <BarChartIcon />, value: stats.totalRooms, label: 'Total Rooms' },
+                        { icon: <HomeIcon />, value: stats.availableRooms, label: 'Available Rooms' },
+                        { icon: <AddBusinessIcon />, value: stats.rentedRooms, label: 'Rented Rooms' },
+                    ].map((stat, index) => (
+                        <Grid item xs={12} sm={4} key={index}>
+                            <Slide direction="up" in={true} timeout={600 + index * 200}>
+                                <Card sx={{ height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.7)' }}>
+                                    <CardContent>
+                                        {stat.icon}
+                                        <Typography variant="h4">{stat.value}</Typography>
+                                        <Typography variant="subtitle1">{stat.label}</Typography>
+                                    </CardContent>
+                                </Card>
+                            </Slide>
+                        </Grid>
+                    ))}
+                </Grid>
+
+                {/* Action Section */}
+                <Grid container spacing={3} justifyContent="center">
+                    {[
+                        { to: '/rooms', label: 'View Rooms', icon: <HomeIcon /> },
+                        { to: '/create-room', label: 'Create Room', icon: <AddBusinessIcon /> },
+                        { to: '/export', label: 'Export Data', icon: <BarChartIcon /> },
+                        { href: 'https://github.com/vishalP143/rntMgmt-Vishal', label: 'GitHub', icon: <GitHubIcon /> },
+                        { to: '/search', label: 'Search Rooms', icon: <SearchIcon /> },
+                        { to: '/qrcodes', label: 'QR Codes', icon: <QrCodeIcon /> },
+                    ].map((action, index) => (
+                        <Grid item xs={12} sm={6} md={4} key={index}>
+                            <Button
+                                component={action.href ? 'a' : Link}
+                                to={action.to}
+                                href={action.href}
+                                variant="contained"
+                                size="large"
+                                startIcon={action.icon}
+                                fullWidth
+                                sx={{ py: 2 }}
+                            >
+                                {action.label}
+                            </Button>
+                        </Grid>
+                    ))}
+                </Grid>
+
+                <Divider sx={{ my: 4 }} />
+            </Container>
+        </Box>
     );
 };
 
