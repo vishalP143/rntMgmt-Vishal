@@ -1,4 +1,3 @@
-// src/components/QRCodePage.js
 import React, { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import {
@@ -17,15 +16,15 @@ import axios from 'axios';
 const QRCodePage = () => {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
-  const baseUrl = 'https://rntmgmt-vishal.onrender.com/api/rooms/';
+  const frontendBaseUrl = `${window.location.origin}/rooms`; // Use the frontend route
 
   useEffect(() => {
     axios.get('https://rntmgmt-vishal.onrender.com/api/rooms')
-      .then(res => {
+      .then((res) => {
         setRooms(res.data);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('Error fetching rooms:', err);
         setLoading(false);
       });
@@ -88,7 +87,7 @@ const QRCodePage = () => {
               }}>
                 <QRCodeSVG
                   id={`qr-${room._id}`}
-                  value={`${baseUrl}${room._id}`}
+                  value={`${frontendBaseUrl}/${room._id}`} // Point to the frontend route
                   size={200}
                   level="H"
                   includeMargin
