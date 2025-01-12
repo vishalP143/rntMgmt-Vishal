@@ -3,6 +3,9 @@ import { Card, CardContent, CardMedia, Typography, Button, Box } from '@mui/mate
 import { Link } from 'react-router-dom';
 
 const RoomCard = ({ room }) => {
+  // Use the static image URL for now
+  const imageUrl = "https://roohtravel.com/wp-content/uploads/2023/07/thailand_hotels_with_pool.jpeg";
+
   return (
     <Card
       sx={{
@@ -17,17 +20,17 @@ const RoomCard = ({ room }) => {
           boxShadow: 8,
         },
       }}
-      role="article" // For better screen reader experience
+      role="article"
       aria-labelledby={`room-card-${room._id}`}
     >
       {/* Room Image */}
       <CardMedia
         component="img"
         height="200"
-        image="https://roohtravel.com/wp-content/uploads/2023/07/thailand_hotels_with_pool.jpeg"
+        image={imageUrl}  // Use static image URL
         alt="Room"
-        loading="lazy" // Lazy loading for performance
-        sx={{ objectFit: 'cover' }} // Maintain aspect ratio of images
+        loading="lazy"
+        sx={{ objectFit: 'cover' }}
       />
 
       {/* Room Details */}
@@ -43,7 +46,7 @@ const RoomCard = ({ room }) => {
           <Link
             to={`/room-details/${room._id}`}
             style={{ textDecoration: 'none', color: 'inherit' }}
-            aria-label={`Go to Room ${room.room_number} details`} // For accessibility
+            aria-label={`Go to Room ${room.room_number} details`}
           >
             Room {room.room_number} - {room.room_type}
           </Link>
@@ -82,7 +85,7 @@ const RoomCard = ({ room }) => {
             fontWeight: 'bold',
             textTransform: 'none',
           }}
-          aria-label={`View details for Room ${room.room_number}`} // For accessibility
+          aria-label={`View details for Room ${room.room_number}`}
         >
           View Details
         </Button>

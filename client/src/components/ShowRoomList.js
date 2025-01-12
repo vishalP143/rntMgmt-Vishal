@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Button, Typography, Container, Grid, CircularProgress, Box } from '@mui/material';
@@ -19,11 +19,9 @@ function ShowRoomList() {
         .catch((err) => {
             setError('Error loading rooms, please try again later.');
             setLoading(false);
+            console.error("Error fetching rooms:", err); // Log the error for debugging
         });
     }, []);
-
-    // Memoize rooms list for better performance on large datasets
-    const memoizedRooms = useMemo(() => rooms, [rooms]);
 
     return (
         <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -42,28 +40,24 @@ function ShowRoomList() {
                 Add New Room
             </Button>
 
-            {loading && (
+            {loading ? (
                 <Box display="flex" justifyContent="center" mt={4}>
                     <CircularProgress aria-live="polite" />
                 </Box>
-            )}
-
-            {error && (
+            ) : error ? (
                 <Box display="flex" justifyContent="center" mt={4}>
                     <Typography variant="h6" color="error">{error}</Typography>
                 </Box>
-            )}
-
-            {!loading && !error && (
+            ) : (
                 <Grid container spacing={3}>
-                    {memoizedRooms.length === 0 ? (
+                    {rooms.length === 0 ? (
                         <Grid item xs={12}>
                             <Typography variant="h6" color="text.secondary">
                                 No Rooms found!
                             </Typography>
                         </Grid>
                     ) : (
-                        memoizedRooms.map((room, index) => (
+                        rooms.map((room) => (
                             <Grid item xs={12} sm={6} md={4} key={room._id}>
                                 <RoomCard room={room} />
                             </Grid>

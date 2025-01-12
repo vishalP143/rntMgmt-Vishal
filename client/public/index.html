@@ -17,7 +17,7 @@
     <!-- Manifest for PWA -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
-    <!-- Font Preconnect and Loading -->
+    <!-- Preconnect and Font Preload for faster loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
     <link
@@ -26,7 +26,7 @@
     />
 
     <title>Rental Management System</title>
-    
+
     <!-- Inline critical CSS -->
     <style>
       body {
@@ -48,9 +48,9 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
 
-    <!-- Load JS asynchronously -->
+    <!-- Load JS asynchronously and defer non-critical JS -->
     <script defer src="%PUBLIC_URL%/static/js/bundle.js"></script>
     <script defer src="%PUBLIC_URL%/static/js/vendors~main.chunk.js"></script>
-    <script defer src="%PUBLIC_URL%/static/js/main.chunk.js"></script>
+    <script async src="%PUBLIC_URL%/static/js/main.chunk.js"></script> <!-- Changed to async for non-critical JS -->
   </body>
 </html>
