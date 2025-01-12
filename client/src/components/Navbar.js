@@ -31,14 +31,30 @@ const Navbar = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-    const handleRoomClick = (event) => setRoomAnchorEl(event.currentTarget);
-    const handleTenantClick = (event) => setTenantAnchorEl(event.currentTarget);
-    const handleClose = () => {
-        setRoomAnchorEl(null);
-        setTenantAnchorEl(null);
-    };
+    const handleOpenMenu = (setter) => (event) => setter(event.currentTarget);
+    const handleCloseMenu = (setter) => () => setter(null);
 
     const toggleDrawer = (open) => () => setDrawerOpen(open);
+
+    // Links for room menu options
+    const roomLinks = [
+        { label: 'View Rooms', to: '/rooms' },
+        { label: 'Create Room', to: '/create-room' },
+        { label: 'Search Rooms', to: '/search' },
+    ];
+
+    // Links for tenant menu options
+    const tenantLinks = [
+        { label: 'View Tenants', to: '/tenants' },
+        { label: 'Create Tenant', to: '/create-tenant' },
+    ];
+
+    const renderMenuItems = (items, handleClose) =>
+        items.map(({ label, to }) => (
+            <MenuItem key={label} component={RouterLink} to={to} onClick={handleClose}>
+                {label}
+            </MenuItem>
+        ));
 
     const mobileMenu = (
         <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
@@ -50,31 +66,31 @@ const Navbar = () => {
                         </ListItemIcon>
                         <ListItemText primary="Home" />
                     </ListItem>
-                    <ListItem button onClick={handleRoomClick}>
+                    <ListItem button onClick={handleOpenMenu(setRoomAnchorEl)}>
                         <ListItemIcon>
                             <MeetingRoomIcon />
                         </ListItemIcon>
                         <ListItemText primary="Rooms" />
                     </ListItem>
-                    <Menu anchorEl={roomAnchorEl} open={Boolean(roomAnchorEl)} onClose={handleClose}>
-                        {['View Rooms', 'Create Room', 'Search Rooms'].map((room) => (
-                            <MenuItem key={room} onClick={handleClose}>
-                                {room}
-                            </MenuItem>
-                        ))}
+                    <Menu
+                        anchorEl={roomAnchorEl}
+                        open={Boolean(roomAnchorEl)}
+                        onClose={handleCloseMenu(setRoomAnchorEl)}
+                    >
+                        {renderMenuItems(roomLinks, handleCloseMenu(setRoomAnchorEl))}
                     </Menu>
-                    <ListItem button onClick={handleTenantClick}>
+                    <ListItem button onClick={handleOpenMenu(setTenantAnchorEl)}>
                         <ListItemIcon>
                             <PersonOutlineIcon />
                         </ListItemIcon>
                         <ListItemText primary="Tenants" />
                     </ListItem>
-                    <Menu anchorEl={tenantAnchorEl} open={Boolean(tenantAnchorEl)} onClose={handleClose}>
-                        {['View Tenants', 'Create Tenant'].map((tenant) => (
-                            <MenuItem key={tenant} onClick={handleClose}>
-                                {tenant}
-                            </MenuItem>
-                        ))}
+                    <Menu
+                        anchorEl={tenantAnchorEl}
+                        open={Boolean(tenantAnchorEl)}
+                        onClose={handleCloseMenu(setTenantAnchorEl)}
+                    >
+                        {renderMenuItems(tenantLinks, handleCloseMenu(setTenantAnchorEl))}
                     </Menu>
                 </List>
             </Box>
@@ -103,6 +119,7 @@ const Navbar = () => {
                             color="inherit"
                             edge="start"
                             onClick={toggleDrawer(true)}
+                            aria-label="menu"
                             sx={{ ml: 1 }}
                         >
                             <MenuIcon />
@@ -122,33 +139,33 @@ const Navbar = () => {
                         </Button>
                         <Button
                             color="inherit"
-                            onClick={handleRoomClick}
+                            onClick={handleOpenMenu(setRoomAnchorEl)}
                             startIcon={<MeetingRoomIcon />}
                             sx={{ textTransform: 'none' }}
                         >
                             Rooms
                         </Button>
-                        <Menu anchorEl={roomAnchorEl} open={Boolean(roomAnchorEl)} onClose={handleClose}>
-                            {['View Rooms', 'Create Room', 'Search Rooms'].map((room) => (
-                                <MenuItem key={room} onClick={handleClose}>
-                                    {room}
-                                </MenuItem>
-                            ))}
+                        <Menu
+                            anchorEl={roomAnchorEl}
+                            open={Boolean(roomAnchorEl)}
+                            onClose={handleCloseMenu(setRoomAnchorEl)}
+                        >
+                            {renderMenuItems(roomLinks, handleCloseMenu(setRoomAnchorEl))}
                         </Menu>
                         <Button
                             color="inherit"
-                            onClick={handleTenantClick}
+                            onClick={handleOpenMenu(setTenantAnchorEl)}
                             startIcon={<PersonOutlineIcon />}
                             sx={{ textTransform: 'none' }}
                         >
                             Tenants
                         </Button>
-                        <Menu anchorEl={tenantAnchorEl} open={Boolean(tenantAnchorEl)} onClose={handleClose}>
-                            {['View Tenants', 'Create Tenant'].map((tenant) => (
-                                <MenuItem key={tenant} onClick={handleClose}>
-                                    {tenant}
-                                </MenuItem>
-                            ))}
+                        <Menu
+                            anchorEl={tenantAnchorEl}
+                            open={Boolean(tenantAnchorEl)}
+                            onClose={handleCloseMenu(setTenantAnchorEl)}
+                        >
+                            {renderMenuItems(tenantLinks, handleCloseMenu(setTenantAnchorEl))}
                         </Menu>
                     </Box>
                 )}

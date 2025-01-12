@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Container, CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
@@ -8,24 +8,29 @@ import theme from './theme/neonGlowTheme';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
-import HomePage from './components/HomePage';
-import CreateRoom from './components/CreateRoom';
-import ShowRoomList from './components/ShowRoomList';
-import ShowRoomDetails from './components/ShowRoomDetails';
-import QRCodePage from './components/QRCodePage';
-import UpdateRoomInfo from './components/UpdateRoomInfo';
-import SearchRooms from './components/SearchRooms';
-import ExportPage from './components/ExportPage';
+// Lazy-load components
+const HomePage = lazy(() => import('./components/HomePage'));
+const CreateRoom = lazy(() => import('./components/CreateRoom'));
+const ShowRoomList = lazy(() => import('./components/ShowRoomList'));
+const ShowRoomDetails = lazy(() => import('./components/ShowRoomDetails'));
+const QRCodePage = lazy(() => import('./components/QRCodePage'));
+const UpdateRoomInfo = lazy(() => import('./components/UpdateRoomInfo'));
+const SearchRooms = lazy(() => import('./components/SearchRooms'));
+const ExportPage = lazy(() => import('./components/ExportPage'));
 
 const App = () => {
     const [rooms, setRooms] = useState([]);
 
     useEffect(() => {
         const fetchRooms = async () => {
-            const response = await axios.get(
-                'https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms'
-            );
-            setRooms(response.data);
+            try {
+                const response = await axios.get(
+                    'https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms'
+                );
+                setRooms(response.data);
+            } catch (error) {
+                console.error('Error fetching room data:', error);
+            }
         };
 
         fetchRooms();
@@ -46,19 +51,20 @@ const App = () => {
                 <Navbar />
 
                 <Container sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-                    <Routes>
-                        <Route path="/" element={<HomePage rooms={rooms} />} />
-                        <Route path="/create-room" element={<CreateRoom />} />
-                        <Route path="/rooms" element={<ShowRoomList rooms={rooms} onDelete={handleDeleteRoom} />} />
-                        <Route path="/rooms/:id" element={<ShowRoomDetails onUpdate={handleUpdateRoom} onDelete={handleDeleteRoom} />} />
-                        <Route path="/export" element={<ExportPage rooms={rooms} />} />
-                        <Route path="/qrcodes" element={<QRCodePage />} />
-                        <Route path="/edit-room/:id" element={<UpdateRoomInfo onUpdate={handleUpdateRoom} />} />
-                        <Route path="/search" element={<SearchRooms onSearch={setRooms} />} />
-                    </Routes>
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <Routes>
+                            <Route path="/" element={<HomePage rooms={rooms} />} />
+                            <Route path="/create-room" element={<CreateRoom />} />
+                            <Route path="/rooms" element={<ShowRoomList rooms={rooms} onDelete={handleDeleteRoom} />} />
+                            <Route path="/rooms/:id" element={<ShowRoomDetails onUpdate={handleUpdateRoom} onDelete={handleDeleteRoom} />} />
+                            <Route path="/export" element={<ExportPage rooms={rooms} />} />
+                            <Route path="/qrcodes" element={<QRCodePage />} />
+                            <Route path="/edit-room/:id" element={<UpdateRoomInfo onUpdate={handleUpdateRoom} />} />
+                            <Route path="/search" element={<SearchRooms onSearch={setRooms} />} />
+                        </Routes>
+                    </Suspense>
                 </Container>
 
-                {/* Ensure Footer is Always Rendered */}
                 <Footer />
             </Router>
         </ThemeProvider>
