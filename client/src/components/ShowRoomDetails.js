@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link as RouterLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -22,6 +22,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
+// Styled Paper component for the main content area
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
   marginTop: theme.spacing(4),
@@ -37,7 +38,8 @@ const ShowRoomDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  useEffect(() => {
+  // Use useCallback to memoize the fetch function and prevent re-renders
+  const fetchRoomDetails = useCallback(() => {
     if (id) {
       axios
         .get(`https://rntmgmt-vishal.onrender.com/api/rooms/${id}`)
@@ -45,6 +47,10 @@ const ShowRoomDetails = () => {
         .catch((err) => setError('Failed to load room details.'));
     }
   }, [id]);
+
+  useEffect(() => {
+    fetchRoomDetails();
+  }, [fetchRoomDetails]);
 
   const handleDelete = () => {
     axios
@@ -91,6 +97,7 @@ const ShowRoomDetails = () => {
                 height="300"
                 image="https://roohtravel.com/wp-content/uploads/2023/07/thailand_hotels_with_pool.jpeg"
                 alt={room.room_number || 'Room Image'}
+                loading="lazy" // Lazy load the image for performance optimization
                 onError={(e) => {
                   e.target.src = 'https://via.placeholder.com/300x200?text=No+Image';
                 }}
@@ -126,6 +133,7 @@ const ShowRoomDetails = () => {
             component={RouterLink}
             to="/rooms"
             variant="outlined"
+            aria-label="Back to room list"
           >
             Back to Room List
           </Button>
@@ -137,6 +145,7 @@ const ShowRoomDetails = () => {
               variant="contained"
               color="primary"
               sx={{ mr: 1 }}
+              aria-label="Edit room details"
             >
               Edit Room
             </Button>
@@ -145,6 +154,7 @@ const ShowRoomDetails = () => {
               variant="outlined"
               color="error"
               onClick={() => setOpenDialog(true)}
+              aria-label="Delete room"
             >
               Delete Room
             </Button>
@@ -166,10 +176,10 @@ const ShowRoomDetails = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenDialog(false)} color="primary">
+          <Button onClick={() => setOpenDialog(false)} color="primary" aria-label="Cancel deletion">
             Cancel
           </Button>
-          <Button onClick={handleDelete} color="error" autoFocus>
+          <Button onClick={handleDelete} color="error" autoFocus aria-label="Confirm deletion">
             Delete
           </Button>
         </DialogActions>

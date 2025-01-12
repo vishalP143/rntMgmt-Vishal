@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
     Container,
     TextField,
@@ -16,15 +16,15 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import RoomCard from './RoomCard'; // Adjusted to RoomCard for your project
+import RoomCard from './RoomCard';
 import axios from 'axios';
+import { debounce } from 'lodash';
 
 const SearchRooms = () => {
     const [rooms, setRooms] = useState([]);
     const [filteredRooms, setFilteredRooms] = useState([]);
     const [loading, setLoading] = useState(true);
     const [roomTypes, setRoomTypes] = useState([]);
-
     const [filters, setFilters] = useState({
         searchTerm: '',
         searchField: 'room_type',
@@ -49,40 +49,45 @@ const SearchRooms = () => {
             });
     }, []);
 
-    const applyFilters = () => {
-        let result = [...rooms];
+    // UseMemo to optimize filtering and sorting
+    const applyFilters = useMemo(() => {
+        return (filters) => {
+            let result = [...rooms];
 
-        if (filters.searchTerm) {
-            result = result.filter(room => {
-                const searchValue = room[filters.searchField]?.toString().toLowerCase();
-                return searchValue?.includes(filters.searchTerm.toLowerCase());
-            });
-        }
-
-        if (filters.roomType !== 'all') {
-            result = result.filter(room => room.room_type === filters.roomType);
-        }
-
-        result.sort((a, b) => {
-            let valueA = a[filters.sortBy]?.toString().toLowerCase();
-            let valueB = b[filters.sortBy]?.toString().toLowerCase();
-
-            if (filters.sortBy === 'lease_start' || filters.sortBy === 'lease_end') {
-                valueA = new Date(a[filters.sortBy]);
-                valueB = new Date(b[filters.sortBy]);
+            if (filters.searchTerm) {
+                result = result.filter(room => {
+                    const searchValue = room[filters.searchField]?.toString().toLowerCase();
+                    return searchValue?.includes(filters.searchTerm.toLowerCase());
+                });
             }
 
-            if (valueA < valueB) return filters.sortOrder === 'asc' ? -1 : 1;
-            if (valueA > valueB) return filters.sortOrder === 'asc' ? 1 : -1;
-            return 0;
-        });
+            if (filters.roomType !== 'all') {
+                result = result.filter(room => room.room_type === filters.roomType);
+            }
 
-        setFilteredRooms(result);
-    };
+            result.sort((a, b) => {
+                let valueA = a[filters.sortBy]?.toString().toLowerCase();
+                let valueB = b[filters.sortBy]?.toString().toLowerCase();
 
-    useEffect(() => {
-        applyFilters();
-    }, [filters]);
+                if (filters.sortBy === 'lease_start' || filters.sortBy === 'lease_end') {
+                    valueA = new Date(a[filters.sortBy]);
+                    valueB = new Date(b[filters.sortBy]);
+                }
+
+                if (valueA < valueB) return filters.sortOrder === 'asc' ? -1 : 1;
+                if (valueA > valueB) return filters.sortOrder === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            setFilteredRooms(result);
+        };
+    }, [rooms]);
+
+    // Debounced function to handle search term changes
+    const handleSearchTermChange = useCallback(
+        debounce((value) => setFilters(prevFilters => ({ ...prevFilters, searchTerm: value })), 500),
+        []
+    );
 
     const resetFilters = () => {
         setFilters({
@@ -93,6 +98,10 @@ const SearchRooms = () => {
             roomType: 'all'
         });
     };
+
+    useEffect(() => {
+        applyFilters(filters);
+    }, [filters, applyFilters]);
 
     if (loading) {
         return (
@@ -116,14 +125,14 @@ const SearchRooms = () => {
                                 fullWidth
                                 label="Search"
                                 value={filters.searchTerm}
-                                onChange={(e) => setFilters({ ...filters, searchTerm: e.target.value })}
+                                onChange={(e) => handleSearchTermChange(e.target.value)}
                                 InputProps={{
                                     startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />
                                 }}
+                                aria-label="search rooms"
                             />
                         </Grid>
 
-                        {/*Search By Dropdown */}
                         <Grid item sx={12} md={2}>
                             <FormControl fullWidth>
                                 <InputLabel>Search By</InputLabel>
@@ -131,6 +140,7 @@ const SearchRooms = () => {
                                     value={filters.searchField}
                                     label="Search By"
                                     onChange={(e) => setFilters({ ...filters, searchField: e.target.value })}
+                                    aria-label="search by"
                                 >
                                     <MenuItem value="room_type">Room Type</MenuItem>
                                     <MenuItem value="building_name">Building Name</MenuItem>
@@ -140,7 +150,6 @@ const SearchRooms = () => {
                             </FormControl>
                         </Grid>
 
-                        {/*Sort By Dropdown */}
                         <Grid item xs={12} md={2}>
                             <FormControl fullWidth>
                                 <InputLabel>Sort By</InputLabel>
@@ -148,6 +157,7 @@ const SearchRooms = () => {
                                     value={filters.sortBy}
                                     label="Sort By"
                                     onChange={(e) => setFilters({ ...filters, sortBy: e.target.value })}
+                                    aria-label="sort by"
                                 >
                                     <MenuItem value="room_number">Room Number</MenuItem>
                                     <MenuItem value="building_name">Building Name</MenuItem>
@@ -157,7 +167,6 @@ const SearchRooms = () => {
                             </FormControl>
                         </Grid>
 
-                        {/*Sort Order*/}
                         <Grid item xs={12} md={2}>
                             <FormControl fullWidth>
                                 <InputLabel>Order</InputLabel>
@@ -165,6 +174,7 @@ const SearchRooms = () => {
                                     value={filters.sortOrder}
                                     label="Order"
                                     onChange={(e) => setFilters({ ...filters, sortOrder: e.target.value })}
+                                    aria-label="order"
                                 >
                                     <MenuItem value="asc">Ascending</MenuItem>
                                     <MenuItem value="desc">Descending</MenuItem>
@@ -172,7 +182,6 @@ const SearchRooms = () => {
                             </FormControl>
                         </Grid>
 
-                        {/*Room Type Filter */}
                         <Grid item xs={12} md={2}>
                             <FormControl fullWidth>
                                 <InputLabel>Room Type</InputLabel>
@@ -180,6 +189,7 @@ const SearchRooms = () => {
                                     value={filters.roomType}
                                     label="Room Type"
                                     onChange={(e) => setFilters({ ...filters, roomType: e.target.value })}
+                                    aria-label="room type"
                                 >
                                     <MenuItem value="all">All Types</MenuItem>
                                     {roomTypes.map((type, index) => (
@@ -191,7 +201,6 @@ const SearchRooms = () => {
                             </FormControl>
                         </Grid>
 
-                        {/*Reset Button*/}
                         <Grid item xs={12}>
                             <Box display="flex" justifyContent="center">
                                 <Button
@@ -207,7 +216,6 @@ const SearchRooms = () => {
                 </CardContent>
             </Card>
 
-            {/*Results Section */}
             <Box sx={{ mb: 2 }}>
                 <Typography variant='body1' color='text.secondary'>
                     Found {filteredRooms.length} rooms

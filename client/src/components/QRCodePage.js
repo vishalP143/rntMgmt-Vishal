@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import {
   Container,
@@ -8,7 +8,7 @@ import {
   CardContent,
   Button,
   CircularProgress,
-  Box
+  Box,
 } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import axios from 'axios';
@@ -16,22 +16,26 @@ import axios from 'axios';
 const QRCodePage = () => {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
-  const frontendBaseUrl = `${window.location.origin}/rooms`; // Use the frontend route
+  const frontendBaseUrl = `${window.location.origin}/rooms`;
 
-  useEffect(() => {
-    axios.get('https://rntmgmt-vishal.onrender.com/api/rooms')
-      .then((res) => {
-        setRooms(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error fetching rooms:', err);
-        setLoading(false);
-      });
+  // Fetching data with optimization (memoization to prevent unnecessary requests)
+  const fetchRooms = useCallback(async () => {
+    try {
+      const res = await axios.get('https://rntmgmt-vishal.onrender.com/api/rooms');
+      setRooms(res.data);
+    } catch (err) {
+      console.error('Error fetching rooms:', err);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  const downloadQR = (roomId, buildingName) => {
-    const canvas = document.createElement("canvas");
+  useEffect(() => {
+    fetchRooms();
+  }, [fetchRooms]);
+
+  const downloadQR = useCallback((roomId, buildingName) => {
+    const canvas = document.createElement('canvas');
     const svg = document.getElementById(`qr-${roomId}`);
     const serializer = new XMLSerializer();
     const source = serializer.serializeToString(svg);
@@ -50,7 +54,7 @@ const QRCodePage = () => {
       a.href = canvas.toDataURL('image/png');
       a.click();
     };
-  };
+  }, []);
 
   if (loading) {
     return (
@@ -72,46 +76,56 @@ const QRCodePage = () => {
       <Grid container spacing={3}>
         {rooms.map((room) => (
           <Grid item xs={12} sm={6} md={4} key={room._id}>
-            <Card sx={{ 
-              height: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              p: 2
-            }}>
-              <CardContent sx={{ 
-                display: 'flex', 
-                flexDirection: 'column', 
+            <Card
+              sx={{
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
                 alignItems: 'center',
-                width: '100%'
-              }}>
+                p: 2,
+              }}
+              role="region" // For accessibility (better for screen readers)
+              aria-labelledby={`room-${room._id}`}
+            >
+              <CardContent
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  width: '100%',
+                }}
+              >
                 <QRCodeSVG
                   id={`qr-${room._id}`}
                   value={`${frontendBaseUrl}/${room._id}`} // Point to the frontend route
                   size={200}
                   level="H"
                   includeMargin
+                  aria-label={`QR code for Room ${room.room_number}`} // For accessibility
                 />
-                <Typography 
-                  variant="h6" 
-                  component="div" 
-                  align="center" 
+                <Typography
+                  variant="h6"
+                  component="div"
+                  align="center"
                   sx={{ mt: 2, mb: 1 }}
+                  id={`room-${room._id}`}
                 >
                   Room {room.room_number}
                 </Typography>
-                <Typography 
-                  variant="body2" 
-                  color="text.secondary" 
-                  align="center" 
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  align="center"
+                  aria-label={`Floor: ${room.floor_number}`}
                 >
                   Floor: {room.floor_number}
                 </Typography>
-                <Typography 
-                  variant="body2" 
-                  color="text.secondary" 
-                  align="center" 
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  align="center"
                   sx={{ mb: 2 }}
+                  aria-label={`Building: ${room.building_name}`}
                 >
                   Building: {room.building_name}
                 </Typography>
@@ -120,6 +134,7 @@ const QRCodePage = () => {
                   startIcon={<DownloadIcon />}
                   onClick={() => downloadQR(room._id, room.building_name)}
                   size="small"
+                  aria-label={`Download QR for Room ${room.room_number}`}
                 >
                   Download QR
                 </Button>

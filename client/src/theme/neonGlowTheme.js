@@ -45,14 +45,6 @@ const neonGlowTheme = createTheme({
       primary: neonGlowColors.textPrimary,
       secondary: neonGlowColors.textSecondary,
     },
-  },MuiCssBaseline: {
-    styleOverrides: `
-      @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;700&display=swap');
-      body {
-        background: linear-gradient(180deg, #0d0f17 0%, #16191f 100%);
-        color: ${neonGlowColors.textPrimary};
-      }
-    `,
   },
   typography: {
     fontFamily: '"Poppins", "Roboto", "Arial", sans-serif',
@@ -78,6 +70,18 @@ const neonGlowTheme = createTheme({
     },
   },
   components: {
+    MuiCssBaseline: {
+      styleOverrides: `
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;700&display=swap');
+        body {
+          background: linear-gradient(180deg, ${neonGlowColors.base} 0%, ${neonGlowColors.surface} 100%);
+          color: ${neonGlowColors.textPrimary};
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+      `,
+    },
     MuiAppBar: {
       styleOverrides: {
         root: {
@@ -92,14 +96,25 @@ const neonGlowTheme = createTheme({
           textTransform: 'uppercase',
           fontWeight: 'bold',
           borderRadius: '8px',
+          color: neonGlowColors.textPrimary,
+          backgroundColor: neonGlowColors.accent,
           boxShadow: `0px 4px 10px ${neonGlowColors.accent}`,
           '&:hover': {
+            backgroundColor: neonGlowColors.vibrantPink,
             boxShadow: `0px 6px 12px ${neonGlowColors.vibrantPink}`,
           },
         },
       },
     },
-    
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          backgroundColor: neonGlowColors.surface,
+          boxShadow: `0px 4px 8px ${neonGlowColors.overlay}`,
+          border: `1px solid ${neonGlowColors.accent}`,
+        },
+      },
+    },
   },
 });
 

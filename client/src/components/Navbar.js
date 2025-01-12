@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
     AppBar,
@@ -31,45 +31,39 @@ const Navbar = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-    const handleOpenMenu = (setter) => (event) => setter(event.currentTarget);
-    const handleCloseMenu = (setter) => () => setter(null);
+    // Use useCallback to memoize the functions for better performance
+    const handleOpenMenu = useCallback((setter) => (event) => setter(event.currentTarget), []);
+    const handleCloseMenu = useCallback((setter) => () => setter(null), []);
+    const toggleDrawer = useCallback((open) => () => setDrawerOpen(open), []);
 
-    const toggleDrawer = (open) => () => setDrawerOpen(open);
-
-    // Links for room menu options
     const roomLinks = [
         { label: 'View Rooms', to: '/rooms' },
         { label: 'Create Room', to: '/create-room' },
         { label: 'Search Rooms', to: '/search' },
     ];
 
-    // Links for tenant menu options
     const tenantLinks = [
         { label: 'View Tenants', to: '/tenants' },
         { label: 'Create Tenant', to: '/create-tenant' },
     ];
 
-    const renderMenuItems = (items, handleClose) =>
+    const renderMenuItems = useCallback((items, handleClose) =>
         items.map(({ label, to }) => (
             <MenuItem key={label} component={RouterLink} to={to} onClick={handleClose}>
                 {label}
             </MenuItem>
-        ));
+        )), []);
 
     const mobileMenu = (
-        <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
+        <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)} aria-label="Main Menu">
             <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
                 <List>
-                    <ListItem button component={RouterLink} to="/">
-                        <ListItemIcon>
-                            <HomeIcon />
-                        </ListItemIcon>
+                    <ListItem button component={RouterLink} to="/" aria-label="Home">
+                        <ListItemIcon><HomeIcon /></ListItemIcon>
                         <ListItemText primary="Home" />
                     </ListItem>
-                    <ListItem button onClick={handleOpenMenu(setRoomAnchorEl)}>
-                        <ListItemIcon>
-                            <MeetingRoomIcon />
-                        </ListItemIcon>
+                    <ListItem button onClick={handleOpenMenu(setRoomAnchorEl)} aria-label="Rooms Menu">
+                        <ListItemIcon><MeetingRoomIcon /></ListItemIcon>
                         <ListItemText primary="Rooms" />
                     </ListItem>
                     <Menu
@@ -79,10 +73,8 @@ const Navbar = () => {
                     >
                         {renderMenuItems(roomLinks, handleCloseMenu(setRoomAnchorEl))}
                     </Menu>
-                    <ListItem button onClick={handleOpenMenu(setTenantAnchorEl)}>
-                        <ListItemIcon>
-                            <PersonOutlineIcon />
-                        </ListItemIcon>
+                    <ListItem button onClick={handleOpenMenu(setTenantAnchorEl)} aria-label="Tenants Menu">
+                        <ListItemIcon><PersonOutlineIcon /></ListItemIcon>
                         <ListItemText primary="Tenants" />
                     </ListItem>
                     <Menu
@@ -110,6 +102,7 @@ const Navbar = () => {
                         color: 'white',
                         fontWeight: 700,
                     }}
+                    aria-label="Rental Management Home"
                 >
                     Rental Management
                 </Typography>
@@ -119,7 +112,7 @@ const Navbar = () => {
                             color="inherit"
                             edge="start"
                             onClick={toggleDrawer(true)}
-                            aria-label="menu"
+                            aria-label="Menu"
                             sx={{ ml: 1 }}
                         >
                             <MenuIcon />
@@ -134,6 +127,7 @@ const Navbar = () => {
                             to="/"
                             startIcon={<HomeIcon />}
                             sx={{ textTransform: 'none' }}
+                            aria-label="Home"
                         >
                             Home
                         </Button>
@@ -142,6 +136,7 @@ const Navbar = () => {
                             onClick={handleOpenMenu(setRoomAnchorEl)}
                             startIcon={<MeetingRoomIcon />}
                             sx={{ textTransform: 'none' }}
+                            aria-label="Rooms Menu"
                         >
                             Rooms
                         </Button>
@@ -157,6 +152,7 @@ const Navbar = () => {
                             onClick={handleOpenMenu(setTenantAnchorEl)}
                             startIcon={<PersonOutlineIcon />}
                             sx={{ textTransform: 'none' }}
+                            aria-label="Tenants Menu"
                         >
                             Tenants
                         </Button>
@@ -175,4 +171,4 @@ const Navbar = () => {
     );
 };
 
-export default Navbar;
+export default React.memo(Navbar);

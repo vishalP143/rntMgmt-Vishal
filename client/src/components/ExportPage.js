@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { Container, Paper, Typography, Button, Box, CircularProgress } from '@mui/material';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import TableViewIcon from '@mui/icons-material/TableView';
-import DownloadIcon from '@mui/icons-material/Download';
-import DescriptionIcon from '@mui/icons-material/Description';
-import axios from 'axios';
+import axios from 'axios'; // Added axios import
 import { saveAs } from 'file-saver';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-import * as XLSX from 'xlsx';
+
+const PictureAsPdfIcon = React.lazy(() => import('@mui/icons-material/PictureAsPdf'));
+const TableViewIcon = React.lazy(() => import('@mui/icons-material/TableView'));
+const DownloadIcon = React.lazy(() => import('@mui/icons-material/Download'));
+const DescriptionIcon = React.lazy(() => import('@mui/icons-material/Description'));
+
+const jsPDF = React.lazy(() => import('jspdf'));
+const XLSX = React.lazy(() => import('xlsx'));
 
 const ExportPage = () => {
     const [rooms, setRooms] = useState([]);
@@ -28,7 +29,6 @@ const ExportPage = () => {
 
     const exportToPDF = () => {
         const doc = new jsPDF();
-
         doc.setFontSize(16);
         doc.text('Rooms List', 14, 15);
         doc.setFontSize(12);
@@ -116,64 +116,70 @@ const ExportPage = () => {
     }
 
     return (
-        <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-            <Paper sx={{ p: 4 }}>
-                <Typography variant='h4' gutterBottom align='center' color='primary'>
-                    Export Rooms
-                </Typography>
+        <Suspense fallback={<CircularProgress />}>
+            <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+                <Paper sx={{ p: 4 }}>
+                    <Typography variant='h4' gutterBottom align='center' color='primary'>
+                        Export Rooms
+                    </Typography>
 
-                <Typography variant="body1" sx={{ mb: 4 }} align="center" color="text.secondary">
-                    Export your room collection in different formats
-                </Typography>
+                    <Typography variant="body1" sx={{ mb: 4 }} align="center" color="text.secondary">
+                        Export your room collection in different formats
+                    </Typography>
 
-                <Box sx={{
-                    display: 'grid',
-                    gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
-                    gap: 3,
-                    mt: 4
-                }}>
-                    <Button
-                        variant="contained"
-                        size="large"
-                        startIcon={<PictureAsPdfIcon />}
-                        onClick={exportToPDF}
-                        sx={{ p: 2 }}
-                    >
-                        Export as PDF
-                    </Button>
-                    <Button
-                        variant="contained"
-                        size="large"
-                        startIcon={<TableViewIcon />}
-                        onClick={exportToCSV}
-                        sx={{ p: 2 }}
-                    >
-                        Export as CSV
-                    </Button>
-                    <Button
-                        variant="contained"
-                        size="large"
-                        startIcon={<DownloadIcon />}
-                        onClick={exportToExcel}
-                        sx={{ p: 2 }}
-                    >
-                        Export as Excel
-                    </Button>
-                    <Button
-                        variant="contained"
-                        size="large"
-                        startIcon={<DescriptionIcon />}
-                        onClick={exportToText}
-                        sx={{ p: 2 }}
-                    >
-                        Export as Text
-                    </Button>
-                </Box>
-                <Typography variant="body2" sx={{ mt: 4 }} align="center" color="text.secondary">
-                    Total Rooms: {rooms.length}
-                </Typography>
-            </Paper>
-        </Container>
+                    <Box sx={{ 
+                        display: 'grid', 
+                        gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, 
+                        gap: 3, 
+                        mt: 4 
+                    }}>
+                        <Button
+                            aria-label="Export as PDF"
+                            variant="contained"
+                            size="large"
+                            startIcon={<PictureAsPdfIcon />}
+                            onClick={exportToPDF}
+                            sx={{ p: 2 }}
+                        >
+                            Export as PDF
+                        </Button>
+                        <Button
+                            aria-label="Export as CSV"
+                            variant="contained"
+                            size="large"
+                            startIcon={<TableViewIcon />}
+                            onClick={exportToCSV}
+                            sx={{ p: 2 }}
+                        >
+                            Export as CSV
+                        </Button>
+                        <Button
+                            aria-label="Export as Excel"
+                            variant="contained"
+                            size="large"
+                            startIcon={<DownloadIcon />}
+                            onClick={exportToExcel}
+                            sx={{ p: 2 }}
+                        >
+                            Export as Excel
+                        </Button>
+                        <Button
+                            aria-label="Export as Text"
+                            variant="contained"
+                            size="large"
+                            startIcon={<DescriptionIcon />}
+                            onClick={exportToText}
+                            sx={{ p: 2 }}
+                        >
+                            Export as Text
+                        </Button>
+                    </Box>
+                    <Typography variant="body2" sx={{ mt: 4 }} align="center" color="text.secondary">
+                        Total Rooms: {rooms.length}
+                    </Typography>
+                </Paper>
+            </Container>
+        </Suspense>
     );
 };
 

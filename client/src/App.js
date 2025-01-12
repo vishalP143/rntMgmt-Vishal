@@ -1,6 +1,6 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Container, CssBaseline } from '@mui/material';
+import { Container, CssBaseline, CircularProgress } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 
@@ -21,18 +21,19 @@ const ExportPage = lazy(() => import('./components/ExportPage'));
 const App = () => {
     const [rooms, setRooms] = useState([]);
 
-    useEffect(() => {
-        const fetchRooms = async () => {
-            try {
-                const response = await axios.get(
-                    'https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms'
-                );
-                setRooms(response.data);
-            } catch (error) {
-                console.error('Error fetching room data:', error);
-            }
-        };
+    // Fetch room data
+    const fetchRooms = async () => {
+        try {
+            const response = await axios.get(
+                'https://5000-vishalp143-rntmgmtvisha-xs4df1lv6s3.ws-us117.gitpod.io/api/rooms'
+            );
+            setRooms(response.data);
+        } catch (error) {
+            console.error('Error fetching room data:', error);
+        }
+    };
 
+    useEffect(() => {
         fetchRooms();
     }, []);
 
@@ -50,8 +51,8 @@ const App = () => {
                 <CssBaseline />
                 <Navbar />
 
-                <Container sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-                    <Suspense fallback={<div>Loading...</div>}>
+                <Container sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh', overflow: 'auto' }}>
+                    <Suspense fallback={<div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>}>
                         <Routes>
                             <Route path="/" element={<HomePage rooms={rooms} />} />
                             <Route path="/create-room" element={<CreateRoom />} />

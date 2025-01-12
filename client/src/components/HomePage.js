@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; // Regular imports at the top
 import { Link } from 'react-router-dom';
+import axios from 'axios'; // Keep axios import at the top
+import BackgroundImage from '../assets/bg.webp'; // Move this import here
+
 import {
     Container,
     Typography,
@@ -12,16 +15,16 @@ import {
     Slide,
     CircularProgress,
 } from '@mui/material';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import SearchIcon from '@mui/icons-material/Search';
-import HomeIcon from '@mui/icons-material/Home';
-import AddBusinessIcon from '@mui/icons-material/AddBusiness';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import QrCodeIcon from '@mui/icons-material/QrCode';
-import BackgroundImage from '../assets/home-bg.jpg'; // Add the background image here
-import axios from 'axios';
 
-const Homepage = () => {
+// Lazy load icons to improve performance
+const GitHubIcon = React.lazy(() => import('@mui/icons-material/GitHub'));
+const SearchIcon = React.lazy(() => import('@mui/icons-material/Search'));
+const HomeIcon = React.lazy(() => import('@mui/icons-material/Home'));
+const AddBusinessIcon = React.lazy(() => import('@mui/icons-material/AddBusiness'));
+const BarChartIcon = React.lazy(() => import('@mui/icons-material/BarChart'));
+const QrCodeIcon = React.lazy(() => import('@mui/icons-material/QrCode'));
+
+const Homepage = React.memo(() => {
     const [stats, setStats] = useState({
         totalRooms: 0,
         availableRooms: 0,
@@ -58,6 +61,7 @@ const Homepage = () => {
                     backgroundImage: `url(${BackgroundImage})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
                 }}
             >
                 <CircularProgress />
@@ -78,6 +82,7 @@ const Homepage = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 color: 'white',
+                position: 'relative',
             }}
         >
             <Box
@@ -119,7 +124,7 @@ const Homepage = () => {
 
                 {/* Stats Section */}
                 <Grid container spacing={4} mb={6}>
-                    {[
+                    {[ 
                         { icon: <BarChartIcon />, value: stats.totalRooms, label: 'Total Rooms' },
                         { icon: <HomeIcon />, value: stats.availableRooms, label: 'Available Rooms' },
                         { icon: <AddBusinessIcon />, value: stats.rentedRooms, label: 'Rented Rooms' },
@@ -148,7 +153,7 @@ const Homepage = () => {
 
                 {/* Action Section */}
                 <Grid container spacing={3} justifyContent="center">
-                    {[
+                    {[ 
                         { to: '/rooms', label: 'View Rooms', icon: <HomeIcon /> },
                         { to: '/create-room', label: 'Create Room', icon: <AddBusinessIcon /> },
                         { to: '/export', label: 'Export Data', icon: <BarChartIcon /> },
@@ -173,6 +178,7 @@ const Homepage = () => {
                                         backgroundColor: '#424242',
                                     },
                                 }}
+                                aria-label={action.label} // For accessibility
                             >
                                 {action.label}
                             </Button>
@@ -184,6 +190,6 @@ const Homepage = () => {
             </Container>
         </Box>
     );
-};
+});
 
 export default Homepage;
