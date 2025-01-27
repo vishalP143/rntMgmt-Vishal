@@ -1,10 +1,12 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Container, CssBaseline, CircularProgress } from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
+import { Container, CssBaseline, CircularProgress, useMediaQuery, IconButton } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import axios from 'axios';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
-import theme from './theme/neonGlowTheme';
+import { darkTheme, lightTheme } from './theme/neonGlowTheme';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
@@ -20,6 +22,7 @@ const ExportPage = lazy(() => import('./components/ExportPage'));
 
 const App = () => {
     const [rooms, setRooms] = useState([]);
+    const [isDarkMode, setIsDarkMode] = useState(true);
 
     // Fetch room data
     const fetchRooms = async () => {
@@ -37,6 +40,13 @@ const App = () => {
         fetchRooms();
     }, []);
 
+    // Detect system dark mode preference
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+    
+    useEffect(() => {
+        setIsDarkMode(prefersDarkMode);  // Adjust theme based on user/system preference
+    }, [prefersDarkMode]);
+
     const handleDeleteRoom = (roomId) => {
         setRooms(rooms.filter((room) => room._id !== roomId));
     };
@@ -45,12 +55,22 @@ const App = () => {
         setRooms(rooms.map((room) => (room._id === updatedRoom._id ? updatedRoom : room)));
     };
 
+    const theme = createTheme({
+        ...darkTheme,  // Use darkTheme or lightTheme depending on isDarkMode
+        palette: {
+            ...darkTheme.palette,
+            mode: isDarkMode ? 'dark' : 'light',
+        },
+    });
+
+    const toggleDarkMode = () => setIsDarkMode(prev => !prev);
+
     return (
         <ThemeProvider theme={theme}>
             <Router>
                 <CssBaseline />
-                <Navbar />
-
+                <Navbar isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+                
                 <Container sx={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: '100vh', overflow: 'auto' }}>
                     <Suspense fallback={<div style={{ textAlign: 'center', marginTop: '20px' }}><CircularProgress /></div>}>
                         <Routes>

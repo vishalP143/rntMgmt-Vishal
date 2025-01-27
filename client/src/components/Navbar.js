@@ -22,8 +22,10 @@ import HomeIcon from '@mui/icons-material/Home';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import MenuIcon from '@mui/icons-material/Menu';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
-const Navbar = () => {
+const Navbar = ({ isDarkMode, toggleDarkMode }) => {
     const [roomAnchorEl, setRoomAnchorEl] = useState(null);
     const [tenantAnchorEl, setTenantAnchorEl] = useState(null);
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -31,7 +33,6 @@ const Navbar = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-    // Use useCallback to memoize the functions for better performance
     const handleOpenMenu = useCallback((setter) => (event) => setter(event.currentTarget), []);
     const handleCloseMenu = useCallback((setter) => () => setter(null), []);
     const toggleDrawer = useCallback((open) => () => setDrawerOpen(open), []);
@@ -90,7 +91,7 @@ const Navbar = () => {
     );
 
     return (
-        <AppBar position="sticky" sx={{ bgcolor: 'primary.main' }}>
+        <AppBar position="sticky" sx={{ bgcolor: theme.palette.background.paper }}>
             <Toolbar>
                 <Typography
                     variant="h6"
@@ -99,7 +100,7 @@ const Navbar = () => {
                     sx={{
                         flexGrow: 1,
                         textDecoration: 'none',
-                        color: 'white',
+                        color: theme.palette.text.primary,
                         fontWeight: 700,
                     }}
                     aria-label="Rental Management Home"
@@ -163,6 +164,13 @@ const Navbar = () => {
                         >
                             {renderMenuItems(tenantLinks, handleCloseMenu(setTenantAnchorEl))}
                         </Menu>
+                        <IconButton
+                            color="inherit"
+                            onClick={toggleDarkMode}
+                            aria-label="Toggle Dark Mode"
+                        >
+                            {isDarkMode ? <Brightness7Icon /> : <Brightness4Icon />}
+                        </IconButton>
                     </Box>
                 )}
             </Toolbar>
