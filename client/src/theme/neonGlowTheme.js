@@ -102,10 +102,10 @@ const darkTheme = createTheme({
           borderRadius: '8px',
           color: neonGlowColors.textPrimary,
           backgroundColor: neonGlowColors.accent,
-          boxShadow: `0px 4px 10px ${neonGlowColors.accent}`,
+          boxShadow: `0px 4px 8px ${neonGlowColors.accent}`, // Softer shadow
           '&:hover': {
             backgroundColor: neonGlowColors.vibrantPink,
-            boxShadow: `0px 6px 12px ${neonGlowColors.vibrantPink}`,
+            boxShadow: `0px 4px 10px ${neonGlowColors.vibrantPink}`, // Softer hover shadow
           },
         },
       },
@@ -204,10 +204,10 @@ const lightTheme = createTheme({
           borderRadius: '8px',
           color: neonGlowColors.lightTextPrimary,
           backgroundColor: neonGlowColors.lightAccent,
-          boxShadow: `0px 4px 10px ${neonGlowColors.lightAccent}`,
+          boxShadow: `0px 4px 8px ${neonGlowColors.lightAccent}`,
           '&:hover': {
             backgroundColor: neonGlowColors.vibrantPink,
-            boxShadow: `0px 6px 12px ${neonGlowColors.vibrantPink}`,
+            boxShadow: `0px 4px 10px ${neonGlowColors.vibrantPink}`,
           },
         },
       },

@@ -1,12 +1,10 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Container, CssBaseline, CircularProgress, useMediaQuery, IconButton } from '@mui/material';
+import { Container, CssBaseline, CircularProgress, useMediaQuery } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import axios from 'axios';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
 
-import { darkTheme, lightTheme } from './theme/neonGlowTheme';
+import { darkTheme } from './theme/neonGlowTheme';  // Keep only the necessary import
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
@@ -55,6 +53,7 @@ const App = () => {
         setRooms(rooms.map((room) => (room._id === updatedRoom._id ? updatedRoom : room)));
     };
 
+    // Create the theme dynamically based on isDarkMode state
     const theme = createTheme({
         ...darkTheme,  // Use darkTheme or lightTheme depending on isDarkMode
         palette: {
