@@ -1,23 +1,23 @@
 import { createTheme } from '@mui/material/styles';
 
 const neonGlowColors = {
-  base: '#0d0f17', // Deep dark background for dark mode
-  surface: '#16191f', // Slightly lighter surface for dark mode
-  accent: '#00ffc6', // Neon aqua accent color
-  vibrantPink: '#ff007f', // Neon pink
-  neonYellow: '#ffea00', // Neon yellow
-  textPrimary: '#ffffff', // Bright white for text
-  textSecondary: '#b3b3b3', // Muted gray for secondary text
-  error: '#ff1744', // Bright red for errors
-  warning: '#ff9100', // Bright orange for warnings
-  success: '#00e676', // Neon green for success
-  info: '#2979ff', // Vibrant blue for info
-  overlay: '#212121', // Subtle overlay color for dark mode
-  lightBase: '#f5f5f5', // Light background for light mode
-  lightSurface: '#ffffff', // Light surface for light mode
-  lightTextPrimary: '#000000', // Dark text for light mode
-  lightTextSecondary: '#757575', // Muted gray text for light mode
-  lightAccent: '#6200ea', // Purple accent for light mode
+  base: '#0d0f17',
+  surface: '#16191f',
+  accent: '#00ffc6',
+  vibrantPink: '#ff007f',
+  neonYellow: '#ffea00',
+  textPrimary: '#ffffff',
+  textSecondary: '#b3b3b3',
+  error: '#ff1744',
+  warning: '#ff9100',
+  success: '#00e676',
+  info: '#2979ff',
+  overlay: '#212121',
+  lightBase: '#f5f5f5',
+  lightSurface: '#ffffff',
+  lightTextPrimary: '#000000',
+  lightTextSecondary: '#757575',
+  lightAccent: '#6200ea',
 };
 
 const darkTheme = createTheme({
@@ -102,10 +102,10 @@ const darkTheme = createTheme({
           borderRadius: '8px',
           color: neonGlowColors.textPrimary,
           backgroundColor: neonGlowColors.accent,
-          boxShadow: `0px 4px 8px ${neonGlowColors.accent}`, // Softer shadow
+          boxShadow: `0px 4px 8px ${neonGlowColors.accent}`,
           '&:hover': {
             backgroundColor: neonGlowColors.vibrantPink,
-            boxShadow: `0px 4px 10px ${neonGlowColors.vibrantPink}`, // Softer hover shadow
+            boxShadow: `0px 4px 10px ${neonGlowColors.vibrantPink}`,
           },
         },
       },
