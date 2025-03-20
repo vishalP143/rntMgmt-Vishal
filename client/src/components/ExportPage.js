@@ -1,15 +1,16 @@
-import React, { Suspense, useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Container, Paper, Typography, Button, Box, CircularProgress } from '@mui/material';
-import axios from 'axios'; // Added axios import
+import axios from 'axios';
 import { saveAs } from 'file-saver';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import * as XLSX from 'xlsx';
 
+// Lazy loading only for icons (not for libraries)
 const PictureAsPdfIcon = React.lazy(() => import('@mui/icons-material/PictureAsPdf'));
 const TableViewIcon = React.lazy(() => import('@mui/icons-material/TableView'));
 const DownloadIcon = React.lazy(() => import('@mui/icons-material/Download'));
 const DescriptionIcon = React.lazy(() => import('@mui/icons-material/Description'));
-
-const jsPDF = React.lazy(() => import('jspdf'));
-const XLSX = React.lazy(() => import('xlsx'));
 
 const ExportPage = () => {
     const [rooms, setRooms] = useState([]);
@@ -27,84 +28,104 @@ const ExportPage = () => {
             });
     }, []);
 
+    // PDF Export
     const exportToPDF = () => {
-        const doc = new jsPDF();
-        doc.setFontSize(16);
-        doc.text('Rooms List', 14, 15);
-        doc.setFontSize(12);
-        doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 25);
+        try {
+            const doc = new jsPDF();
+            doc.setFontSize(16);
+            doc.text('Rooms List', 14, 15);
+            doc.setFontSize(12);
+            doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 25);
 
-        const tableColumn = ["Room Number", "Floor Number", "Building Name", "Room Type", "Rent", "Availability"];
-        const tableRows = rooms.map(room => [
-            room.room_number,
-            room.floor_number,
-            room.building_name,
-            room.room_type,
-            room.rent,
-            room.availability ? 'Available' : 'Occupied'
-        ]);
+            const tableColumn = ["Room Number", "Floor Number", "Building Name", "Room Type", "Rent", "Availability"];
+            const tableRows = rooms.map(room => [
+                room.room_number,
+                room.floor_number,
+                room.building_name,
+                room.room_type,
+                room.rent,
+                room.availability ? 'Available' : 'Occupied'
+            ]);
 
-        doc.autoTable({
-            startY: 30,
-            head: [tableColumn],
-            body: tableRows,
-            theme: 'grid',
-            styles: { fontSize: 8 },
-            headStyles: { fillColor: [41, 128, 185], textColor: 255 }
-        });
+            doc.autoTable({
+                startY: 30,
+                head: [tableColumn],
+                body: tableRows,
+                theme: 'grid',
+                styles: { fontSize: 8 },
+                headStyles: { fillColor: [41, 128, 185], textColor: 255 }
+            });
 
-        doc.save('rooms-list.pdf');
+            doc.save('rooms-list.pdf');
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+        }
     };
 
+    // Excel Export
     const exportToExcel = () => {
-        const worksheet = XLSX.utils.json_to_sheet(rooms.map(room => ({
-            "Room Number": room.room_number,
-            "Floor Number": room.floor_number,
-            "Building Name": room.building_name,
-            "Room Type": room.room_type,
-            "Rent": room.rent,
-            "Availability": room.availability ? 'Available' : 'Occupied'
-        })));
+        try {
+            const worksheet = XLSX.utils.json_to_sheet(rooms.map(room => ({
+                "Room Number": room.room_number,
+                "Floor Number": room.floor_number,
+                "Building Name": room.building_name,
+                "Room Type": room.room_type,
+                "Rent": room.rent,
+                "Availability": room.availability ? 'Available' : 'Occupied'
+            })));
 
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Rooms");
-        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        saveAs(data, 'rooms-list.xlsx');
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Rooms");
+            const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+            const data = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            saveAs(data, 'rooms-list.xlsx');
+        } catch (error) {
+            console.error('Error generating Excel file:', error);
+        }
     };
 
+    // CSV Export
     const exportToCSV = () => {
-        const worksheet = XLSX.utils.json_to_sheet(rooms.map(room => ({
-            "Room Number": room.room_number,
-            "Floor Number": room.floor_number,
-            "Building Name": room.building_name,
-            "Room Type": room.room_type,
-            "Rent": room.rent,
-            "Availability": room.availability ? 'Available' : 'Occupied'
-        })));
+        try {
+            const worksheet = XLSX.utils.json_to_sheet(rooms.map(room => ({
+                "Room Number": room.room_number,
+                "Floor Number": room.floor_number,
+                "Building Name": room.building_name,
+                "Room Type": room.room_type,
+                "Rent": room.rent,
+                "Availability": room.availability ? 'Available' : 'Occupied'
+            })));
 
-        const csv = XLSX.utils.sheet_to_csv(worksheet);
-        const data = new Blob([csv], { type: 'text/csv;charset=utf-8' });
-        saveAs(data, 'rooms-list.csv');
+            const csv = XLSX.utils.sheet_to_csv(worksheet);
+            const data = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+            saveAs(data, 'rooms-list.csv');
+        } catch (error) {
+            console.error('Error generating CSV file:', error);
+        }
     };
 
+    // Text Export
     const exportToText = () => {
-        let content = 'Rooms List\n\n';
-        content += `Generated on: ${new Date().toLocaleDateString()}\n\n`;
+        try {
+            let content = 'Rooms List\n\n';
+            content += `Generated on: ${new Date().toLocaleDateString()}\n\n`;
 
-        rooms.forEach((room, index) => {
-            content += `${index + 1}. ROOM DETAILS\n`;
-            content += `Room Number: ${room.room_number}\n`;
-            content += `Floor Number: ${room.floor_number}\n`;
-            content += `Building Name: ${room.building_name}\n`;
-            content += `Room Type: ${room.room_type}\n`;
-            content += `Rent: ${room.rent}\n`;
-            content += `Availability: ${room.availability ? 'Available' : 'Occupied'}\n`;
-            content += '\n----------------------------\n\n';
-        });
+            rooms.forEach((room, index) => {
+                content += `${index + 1}. ROOM DETAILS\n`;
+                content += `Room Number: ${room.room_number}\n`;
+                content += `Floor Number: ${room.floor_number}\n`;
+                content += `Building Name: ${room.building_name}\n`;
+                content += `Room Type: ${room.room_type}\n`;
+                content += `Rent: ${room.rent}\n`;
+                content += `Availability: ${room.availability ? 'Available' : 'Occupied'}\n`;
+                content += '\n----------------------------\n\n';
+            });
 
-        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-        saveAs(blob, 'rooms-list.txt');
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            saveAs(blob, 'rooms-list.txt');
+        } catch (error) {
+            console.error('Error generating text file:', error);
+        }
     };
 
     if (loading) {
